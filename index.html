@@ -24,6 +24,7 @@
   --safe:env(safe-area-inset-bottom,0px);
   --ff:"Pretendard Variable","Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
 }
+:root{ --rail:238px; --wmax:1080px; }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{
@@ -42,7 +43,7 @@ input,textarea,select{font-family:inherit;font-size:16px;color:var(--tx)}
 a{color:var(--snu);text-decoration:none;border-bottom:1px solid rgba(76,141,255,.35)}
 a:hover{color:#7FADFF;border-bottom-color:#7FADFF}
 .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
-.wrap{max-width:1080px;margin:0 auto;padding:0 var(--sp)}
+.wrap{max-width:var(--wmax);margin:0 auto;padding:0 var(--sp)}
 .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
 /* ── header ───────────────────────────────────────────── */
@@ -65,7 +66,8 @@ header{
 
 /* ── nav (desktop rail / mobile bottom bar) ───────────── */
 nav{border-bottom:1px solid var(--line);background:var(--bg)}
-.navin{display:flex;gap:2px;max-width:1080px;margin:0 auto;padding:0 calc(var(--sp) - 4px);overflow-x:auto;scrollbar-width:none}
+.navin{display:flex;gap:2px;max-width:var(--wmax);margin:0 auto;padding:0 calc(var(--sp) - 4px);overflow-x:auto;scrollbar-width:none}
+.railtop,.railfoot{display:none}
 .navin::-webkit-scrollbar{display:none}
 nav button{
   appearance:none;background:none;border:0;position:relative;
@@ -98,6 +100,51 @@ nav button .m{display:none}
   nav button[aria-selected=true] .dot{background:var(--acc)}
   nav button[aria-selected=true]::after{display:none}
 }
+
+/* ── 좌측 레일 (넓은 화면) ─────────────────────────────── */
+@media(min-width:1000px){
+  :root{ --wmax:1360px }
+  body{ padding-left:var(--rail); padding-bottom:32px }
+  body.zen{ padding-left:0 }
+
+  nav{
+    position:fixed; top:0; left:0; bottom:0; width:var(--rail); z-index:60;
+    border-bottom:0; border-right:1px solid var(--line);
+    background:var(--panel); display:flex; flex-direction:column;
+    overflow-y:auto; overscroll-behavior:contain;
+  }
+  .railtop{
+    display:block; padding:18px 18px 12px; border-bottom:1px solid var(--line); margin-bottom:10px;
+  }
+  .railtop b{display:block;font-size:16px;font-weight:800;letter-spacing:-.03em}
+  .railtop span{display:block;font-size:11.5px;color:var(--tx3);margin-top:3px}
+  .navin{
+    display:block; max-width:none; margin:0; padding:0 10px; overflow:visible; flex:1 1 auto;
+  }
+  nav button{
+    display:flex; align-items:center; gap:9px; width:100%; text-align:left;
+    padding:10px 12px; min-height:42px; border-radius:9px; margin-bottom:2px;
+    font-size:13.5px; font-weight:600; white-space:normal; line-height:1.35;
+    transition:background .14s,color .14s;
+  }
+  nav button .dot{display:none}
+  nav button:hover{background:var(--panel2);color:var(--tx2)}
+  nav button[aria-selected=true]{background:var(--panel3);color:var(--tx)}
+  nav button[aria-selected=true]::after{
+    left:0; right:auto; top:50%; bottom:auto; transform:translateY(-50%);
+    width:3px; height:20px; border-radius:0 3px 3px 0;
+  }
+  .railfoot{
+    display:block; padding:12px 18px 16px; border-top:1px solid var(--line);
+    font-size:11px; color:var(--tx3); line-height:1.5;
+  }
+
+  header{ z-index:40 }
+  .brand b{ display:none }
+  .brand span{ font-size:13px; color:var(--tx2) }
+  #toast{ left:calc(50% + var(--rail)/2) }
+}
+@media(min-width:1500px){ :root{ --wmax:1520px } }
 
 /* ── section / cards ──────────────────────────────────── */
 section{display:none;padding:20px 0 40px}
@@ -410,6 +457,15 @@ body.practice #qbank .qc.cur textarea{min-height:190px}
 .allclear b{font-size:14.5px;font-weight:700;display:block}
 .allclear span{font-size:12.5px;color:var(--tx2)}
 
+/* ── 넓은 화면 밀도 (레일 레이아웃 이후 최종 오버라이드) ── */
+@media(min-width:1000px){
+  .grid2.a{grid-template-columns:1.55fr 1fr}
+  .inpg{grid-template-columns:repeat(4,1fr)}
+  .costg{grid-template-columns:repeat(3,1fr)}
+  .cmpg{grid-template-columns:repeat(3,1fr)}
+  section{padding:22px 0 48px}
+}
+
 /* ── print ────────────────────────────────────────────── */
 @media print{
   :root{--bg:#fff;--panel:#fff;--panel2:#fff;--panel3:#fff;--line:#ccc;--line2:#999;
@@ -444,6 +500,10 @@ body.practice #qbank .qc.cur textarea{min-height:190px}
 </header>
 
 <nav aria-label="주요 화면">
+  <div class="railtop">
+    <b>EMBA 2027</b>
+    <span>2027학년도 봄학기 · 서울대 / KAIST</span>
+  </div>
   <div class="navin" role="tablist">
     <button role="tab" data-t="ov" aria-selected="true"><span class="d">개요 &amp; 리스크</span><span class="m">개요</span><i class="dot"></i></button>
     <button role="tab" data-t="chk" aria-selected="false"><span class="d">일정 &amp; 서류 체크리스트</span><span class="m">체크</span><i class="dot"></i></button>
@@ -452,6 +512,7 @@ body.practice #qbank .qc.cur textarea{min-height:190px}
     <button role="tab" data-t="cost" aria-selected="false"><span class="d">비용 시뮬레이터</span><span class="m">비용</span><i class="dot"></i></button>
     <button role="tab" data-t="cmp" aria-selected="false"><span class="d">학교 비교</span><span class="m">비교</span><i class="dot"></i></button>
   </div>
+  <div class="railfoot">입력값은 이 브라우저에만 저장된다.<br>개요 탭에서 백업 파일을 받아 둘 것.</div>
 </nav>
 
 <!-- ══════════ 1. 개요 ══════════ -->
