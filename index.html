@@ -1,1131 +1,1832 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0d1117">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B0D10">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="EMBA 2027">
-<meta name="description" content="서울대·KAIST EMBA 2027 봄학기 입학 준비 대시보드">
+<meta name="color-scheme" content="dark">
+<title>EMBA 2027 — 입학 준비</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%237c3aed%22/%3E%3Ctext x=%2250%22 y=%2266%22 font-size=%2244%22 font-weight=%22700%22 text-anchor=%22middle%22 fill=%22%23fff%22 font-family=%22sans-serif%22%3EEM%3C/text%3E%3C/svg%3E">
-<title>EMBA 2027 봄학기 입학 준비 대시보드</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B0D10'/%3E%3Crect x='12' y='16' width='40' height='4' rx='2' fill='%238B5CF6'/%3E%3Crect x='12' y='28' width='28' height='4' rx='2' fill='%234C8DFF'/%3E%3Crect x='12' y='40' width='16' height='4' rx='2' fill='%23F0A22E'/%3E%3C/svg%3E">
 <style>
-  :root{
-    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --line:#2a3140;
-    --tx:#e6edf3; --tx2:#9aa7b8; --tx3:#6e7d90;
-    --snu:#3b82f6; --kaist:#f59e0b;
-    --ok:#22c55e; --warn:#f97316; --bad:#ef4444; --acc:#7c3aed;
+/* ── tokens ───────────────────────────────────────────── */
+:root{
+  --bg:#0B0D10; --panel:#14181D; --panel2:#1B2027; --panel3:#222932;
+  --line:#262D36; --line2:#333C48;
+  --tx:#EAEEF2; --tx2:#9BA6B3; --tx3:#8F9AA8;
+  --snu:#4C8DFF; --kaist:#F0A22E;
+  --ok:#34D399; --warn:#FB923C; --bad:#F4485F; --acc:#8B5CF6;
+  --r:14px; --r2:10px; --r3:7px;
+  --sp:16px;
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 8px 24px -16px rgba(0,0,0,.9);
+  --safe:env(safe-area-inset-bottom,0px);
+  --ff:"Pretendard Variable","Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--tx); font-family:var(--ff);
+  font-size:15px; line-height:1.6; letter-spacing:-.01em;
+  word-break:keep-all; overflow-wrap:anywhere; text-wrap:pretty;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:calc(84px + var(--safe));
+}
+@media(min-width:761px){ body{padding-bottom:48px} }
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit;font-size:16px;color:var(--tx)}
+a{color:var(--snu);text-decoration:none;border-bottom:1px solid rgba(76,141,255,.35)}
+a:hover{color:#7FADFF;border-bottom-color:#7FADFF}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.wrap{max-width:1080px;margin:0 auto;padding:0 var(--sp)}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ── header ───────────────────────────────────────────── */
+header{
+  position:sticky;top:0;z-index:40;
+  background:color-mix(in oklab,var(--bg) 88%,transparent);
+  backdrop-filter:saturate(140%) blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.hd{display:flex;align-items:center;gap:12px;height:56px}
+.brand{display:flex;align-items:baseline;gap:8px;min-width:0}
+.brand b{font-size:16px;letter-spacing:-.03em;white-space:nowrap}
+.brand span{font-size:12px;color:var(--tx3);white-space:nowrap}
+.hprog{margin-left:auto;display:flex;align-items:center;gap:10px}
+.hprog .lbl{font-size:11px;color:var(--tx3);letter-spacing:.04em;text-transform:uppercase}
+.track{width:110px;height:6px;border-radius:99px;background:var(--panel3);overflow:hidden}
+.track>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--acc),var(--snu));border-radius:99px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+#allpct{font-size:13px;font-weight:700;min-width:38px;text-align:right}
+@media(max-width:520px){ .track{width:62px} .brand span{display:none} }
+
+/* ── nav (desktop rail / mobile bottom bar) ───────────── */
+nav{border-bottom:1px solid var(--line);background:var(--bg)}
+.navin{display:flex;gap:2px;max-width:1080px;margin:0 auto;padding:0 calc(var(--sp) - 4px);overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+nav button{
+  appearance:none;background:none;border:0;position:relative;
+  padding:12px 12px 11px;min-height:44px;font-size:14px;font-weight:600;
+  color:var(--tx3);white-space:nowrap;border-radius:8px 8px 0 0;
+  transition:color .16s;
+}
+nav button:hover{color:var(--tx2)}
+nav button[aria-selected=true]{color:var(--tx)}
+nav button[aria-selected=true]::after{
+  content:"";position:absolute;left:10px;right:10px;bottom:-1px;height:2px;
+  background:var(--acc);border-radius:2px 2px 0 0;
+}
+nav button .m{display:none}
+@media(max-width:760px){
+  nav{
+    position:fixed;left:0;right:0;bottom:0;top:auto;z-index:50;
+    border-top:1px solid var(--line);border-bottom:0;
+    background:color-mix(in oklab,var(--bg) 92%,transparent);
+    backdrop-filter:saturate(140%) blur(14px);
+    padding-bottom:var(--safe);
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--tx);
-    font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',system-ui,sans-serif;
-    font-size:14px;line-height:1.6;padding:24px 20px 80px}
-  .wrap{max-width:1180px;margin:0 auto}
-
-  header{margin-bottom:20px}
-  h1{font-size:22px;font-weight:700;letter-spacing:-.4px}
-  .sub{color:var(--tx2);font-size:13px;margin-top:4px}
-
-  /* D-Day strip */
-  .ddays{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:10px;margin:18px 0 22px}
-  .dd{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden}
-  .dd::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--tx3)}
-  .dd.snu::before{background:var(--snu)} .dd.kaist::before{background:var(--kaist)}
-  .dd.urgent::before{background:var(--bad)}
-  .dd .lb{font-size:11px;color:var(--tx2);letter-spacing:.2px}
-  .dd .n{font-size:24px;font-weight:700;margin:2px 0;letter-spacing:-1px}
-  .dd .n.urgent{color:var(--bad)} .dd .n.soon{color:var(--warn)}
-  .dd .dt{font-size:11px;color:var(--tx3);font-variant-numeric:tabular-nums}
-
-  /* tabs */
-  nav{display:flex;flex-wrap:wrap;gap:6px;border-bottom:1px solid var(--line);margin-bottom:20px}
-  nav button{background:none;border:none;color:var(--tx2);font:inherit;font-size:13.5px;
-    padding:9px 15px;cursor:pointer;border-bottom:2px solid transparent;border-radius:6px 6px 0 0}
-  nav button:hover{color:var(--tx);background:var(--panel)}
-  nav button.on{color:var(--tx);border-bottom-color:var(--acc);font-weight:600}
-
-  section{display:none} section.on{display:block;animation:fi .18s ease}
-  @keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
-
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
-  .card h2{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-  .card h3{font-size:13px;font-weight:700;color:var(--tx2);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px}
-  .card h3:first-child{margin-top:0}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
-
-  .tag{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:99px;font-weight:600;letter-spacing:.2px}
-  .t-snu{background:rgba(59,130,246,.15);color:#7cb0ff;border:1px solid rgba(59,130,246,.35)}
-  .t-kaist{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.35)}
-  .t-ok{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.35)}
-  .t-warn{background:rgba(249,115,22,.15);color:#fb923c;border:1px solid rgba(249,115,22,.35)}
-  .t-bad{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.35)}
-  .t-gray{background:rgba(110,125,144,.15);color:var(--tx2);border:1px solid var(--line)}
-
-  table{width:100%;border-collapse:collapse;font-size:13px}
-  th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-  th{color:var(--tx2);font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;background:var(--panel2)}
-  tr:last-child td{border-bottom:none}
-  td.num{font-variant-numeric:tabular-nums;text-align:right}
-
-  .alert{border-radius:10px;padding:13px 15px;font-size:13px;margin-bottom:14px;border:1px solid}
-  .alert.red{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.35)}
-  .alert.orange{background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.35)}
-  .alert.blue{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.3)}
-  .alert.green{background:rgba(34,197,94,.09);border-color:rgba(34,197,94,.38)}
-  .alert b{display:block;margin-bottom:5px;font-size:13.5px}
-
-  /* checklist */
-  .chk{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
-  .chk:last-child{border-bottom:none}
-  .chk input{width:17px;height:17px;margin-top:2px;accent-color:var(--acc);cursor:pointer;flex-shrink:0}
-  .chk label{cursor:pointer;flex:1}
-  .chk .d{font-size:12px;color:var(--tx3);margin-top:1px}
-  .chk.done label{color:var(--tx3);text-decoration:line-through}
-
-  .bar{height:7px;background:var(--panel2);border-radius:99px;overflow:hidden;margin:8px 0 4px}
-  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),#a78bfa);transition:width .3s}
-  .pct{font-size:12px;color:var(--tx2);font-variant-numeric:tabular-nums}
-
-  /* timeline */
-  .tl{position:relative;padding-left:22px}
-  .tl::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line)}
-  .tl .it{position:relative;padding:8px 0}
-  .tl .it::before{content:'';position:absolute;left:-21px;top:14px;width:10px;height:10px;border-radius:99px;
-    background:var(--bg);border:2px solid var(--tx3)}
-  .tl .it.snu::before{border-color:var(--snu)} .tl .it.kaist::before{border-color:var(--kaist)}
-  .tl .it.past::before{background:var(--tx3);border-color:var(--tx3)}
-  .tl .it.past{opacity:.45}
-  .tl .dt{font-size:11.5px;color:var(--tx3);font-variant-numeric:tabular-nums}
-  .tl .ti{font-size:13.5px;font-weight:600}
-
-  /* inputs */
-  input[type=text],input[type=number],textarea,select{
-    width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:8px;
-    color:var(--tx);font:inherit;font-size:13px;padding:8px 10px}
-  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc)}
-  textarea{resize:vertical;min-height:90px;line-height:1.65}
-  label.fl{display:block;font-size:11.5px;color:var(--tx2);margin-bottom:4px;font-weight:600}
-  .fld{margin-bottom:12px}
-  .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  @media(max-width:640px){.row3,.row2{grid-template-columns:1fr}}
-  button.btn{background:var(--acc);border:none;color:#fff;font:inherit;font-size:13px;font-weight:600;
-    padding:8px 16px;border-radius:8px;cursor:pointer}
-  button.btn:hover{filter:brightness(1.12)}
-  button.btn.sec{background:var(--panel2);border:1px solid var(--line);color:var(--tx)}
-
-  .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
-  .kv dt{color:var(--tx2)} .kv dd{font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
-  .big{font-size:26px;font-weight:700;letter-spacing:-1px;font-variant-numeric:tabular-nums}
-
-  details{border:1px solid var(--line);border-radius:9px;margin-bottom:8px;background:var(--panel2)}
-  details summary{cursor:pointer;padding:11px 14px;font-size:13.5px;font-weight:600;list-style:none;display:flex;gap:9px;align-items:flex-start}
-  details summary::-webkit-details-marker{display:none}
-  details summary::before{content:'▸';color:var(--acc);flex-shrink:0;transition:transform .15s}
-  details[open] summary::before{transform:rotate(90deg)}
-  details .bd{padding:0 14px 13px 35px;font-size:13px;color:var(--tx2)}
-  details .bd .hint{color:var(--tx3);font-size:12px;margin-bottom:8px;font-style:italic}
-
-  .note{font-size:11.5px;color:var(--tx3);margin-top:8px}
-  ul.pl{padding-left:18px} ul.pl li{margin:4px 0}
-  .mini{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--line)}
-  .mini:last-child{border:none}
-  .mini b{font-variant-numeric:tabular-nums}
-  .bargrp{margin:10px 0}
-  .bargrp .lbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
-  .bargrp .tr{height:9px;background:var(--panel2);border-radius:99px;overflow:hidden}
-  .bargrp .tr>i{display:block;height:100%;border-radius:99px}
-
-  /* ---------- 저장 UX ---------- */
-  .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(14px);
-    background:var(--acc);color:#fff;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:99px;
-    opacity:0;pointer-events:none;transition:.22s;z-index:99;box-shadow:0 6px 20px rgba(0,0,0,.45)}
-  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-  .hdrow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-  .rst{background:var(--panel2);border:1px solid var(--line);color:var(--tx2);font:inherit;font-size:11.5px;
-    padding:6px 11px;border-radius:8px;cursor:pointer;white-space:nowrap;flex-shrink:0}
-  .rst:hover{color:var(--tx);border-color:var(--bad)}
-
-  /* ---------- 표 가로 스크롤 ---------- */
-  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px}
-  .tblwrap table{min-width:520px}
-  .tblwrap::-webkit-scrollbar{height:6px}
-  .tblwrap::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
-
-  /* ---------- 탭 가로 스크롤 + 상단 고정 ---------- */
-  nav{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:sticky;top:0;z-index:20;
-    background:var(--bg);padding-top:6px}
-  nav::-webkit-scrollbar{display:none}
-  nav button{white-space:nowrap}
-
-  /* ---------- 실행용 UI ---------- */
-  .hdmeter{display:flex;align-items:center;gap:10px;margin-top:10px}
-  .hdmeter .bar{flex:1;margin:0}
-  .hdmeter .pct{white-space:nowrap;font-weight:700;color:var(--tx)}
-
-  .focus{background:linear-gradient(180deg,rgba(124,58,237,.14),rgba(124,58,237,.04));
-    border:1px solid rgba(124,58,237,.4)}
-  .fi{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
-  .fi:last-child{border-bottom:none}
-  .fi input{width:18px;height:18px;margin-top:2px;accent-color:var(--acc);cursor:pointer;flex-shrink:0}
-  .fi .bd2{flex:1;min-width:0}
-  .fi .tt{font-size:13.5px;font-weight:600;line-height:1.45}
-  .fi .mt{font-size:11.5px;color:var(--tx3);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .fi.done .tt{color:var(--tx3);text-decoration:line-through}
-  .empty{color:var(--tx3);font-size:12.5px;padding:14px 0;text-align:center}
-
-  .due{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:99px;
-    font-variant-numeric:tabular-nums;flex-shrink:0}
-  .due.d0{background:rgba(239,68,68,.18);color:#f87171}
-  .due.d1{background:rgba(249,115,22,.18);color:#fb923c}
-  .due.d2{background:rgba(59,130,246,.15);color:#7cb0ff}
-  .due.d3{background:rgba(110,125,144,.14);color:var(--tx2)}
-  .src{font-size:10.5px;color:var(--tx3);border:1px solid var(--line);border-radius:99px;padding:1px 7px}
-
-  .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-  .sw{display:inline-flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line);
-    border-radius:99px;padding:6px 12px;font-size:12px;color:var(--tx2);cursor:pointer;user-select:none}
-  .sw input{width:15px;height:15px;accent-color:var(--acc);cursor:pointer;margin:0}
-  .sw.on{color:var(--tx);border-color:var(--acc)}
-
-  .addrow{display:grid;grid-template-columns:150px 1fr auto;gap:8px;margin-top:12px}
-  .addrow input[type=date]{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:8px;
-    color:var(--tx);font:inherit;font-size:13px;padding:8px 10px;color-scheme:dark}
-  @media(max-width:640px){.addrow{grid-template-columns:1fr;gap:7px}}
-
-  .myrow{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
-  .myrow:last-child{border-bottom:none}
-  .myrow input[type=checkbox]{width:18px;height:18px;margin-top:2px;accent-color:var(--acc);cursor:pointer;flex-shrink:0}
-  .myrow .bd2{flex:1;min-width:0}
-  .myrow.done .tt{color:var(--tx3);text-decoration:line-through}
-  .del{background:none;border:none;color:var(--tx3);font:inherit;font-size:15px;line-height:1;
-    cursor:pointer;padding:2px 6px;border-radius:6px;flex-shrink:0}
-  .del:hover{color:var(--bad);background:rgba(239,68,68,.1)}
-
-  .tl .it.mine::before{border-color:var(--acc);background:var(--acc)}
-  .tl .it .rm{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:13px;padding:0 4px}
-  .tl .it .rm:hover{color:var(--bad)}
-  .tl .ti{display:flex;align-items:center;gap:6px;justify-content:space-between}
-
-  details.risk{background:var(--panel);border-color:var(--line);margin-bottom:10px}
-  details.risk>summary{font-size:13px;font-weight:700}
-  details.risk .bd{color:var(--tx2);line-height:1.7}
-  details.risk.g>summary::before{color:var(--ok)}
-  details.risk.o>summary::before{color:var(--warn)}
-  details.risk.r>summary::before{color:var(--bad)}
-  details.risk.b>summary::before{color:var(--snu)}
-
-  /* ---------- 모바일 ---------- */
-  @media(max-width:640px){
-    nav{position:fixed;left:0;right:0;bottom:0;top:auto;display:grid;grid-template-columns:repeat(6,1fr);
-      gap:0;border-top:1px solid var(--line);border-bottom:none;margin:0;padding:0;
-      background:rgba(13,17,23,.96);backdrop-filter:blur(10px);z-index:40;overflow:visible;
-      padding-bottom:env(safe-area-inset-bottom)}
-    nav button{padding:9px 2px 8px;font-size:10.5px;border-radius:0;border-bottom:none;
-      border-top:2px solid transparent;white-space:normal;line-height:1.25;text-align:center}
-    nav button.on{border-top-color:var(--acc);background:rgba(124,58,237,.1)}
-    body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
-    .toast{bottom:calc(76px + env(safe-area-inset-bottom))}
+  .navin{display:grid;grid-template-columns:repeat(6,1fr);gap:0;padding:0;overflow:visible}
+  nav button{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    padding:8px 2px calc(8px);min-height:56px;font-size:11px;font-weight:600;border-radius:0;
   }
-  @media(max-width:640px){
-    body{padding:14px 12px calc(70px + env(safe-area-inset-bottom));font-size:14.5px}
-    h1{font-size:18px;line-height:1.35}
-    .sub{font-size:12px}
-    .ddays{grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 14px}
-    .dd{padding:10px 11px} .dd .n{font-size:20px} .dd .lb{font-size:10.5px}
-    .card{padding:14px;border-radius:11px}
-    nav button{padding:10px 13px;font-size:13px}
-    .chk{padding:12px 0} .chk input{width:22px;height:22px}
-    details summary{padding:14px 13px}
-    input[type=text],input[type=number],textarea,select{font-size:16px;padding:10px 11px}
-    button.btn{padding:11px 18px;font-size:14px}
-    .big{font-size:22px}
-    .tl{padding-left:19px}
-    table{font-size:12.5px} th,td{padding:8px 8px}
-  }
-  .l2{display:none}
-  @media(max-width:640px){ .l1{display:none} .l2{display:inline} }
-  @media(max-width:380px){ .ddays{grid-template-columns:1fr} }
+  nav button .d{display:none} nav button .m{display:block}
+  nav button .dot{width:5px;height:5px;border-radius:99px;background:transparent}
+  nav button[aria-selected=true] .dot{background:var(--acc)}
+  nav button[aria-selected=true]::after{display:none}
+}
+
+/* ── section / cards ──────────────────────────────────── */
+section{display:none;padding:20px 0 40px}
+section.on{display:block}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px;box-shadow:var(--shadow);
+}
+.card+.card{margin-top:12px}
+.ch{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ch h2,.ch h3{font-size:15px;letter-spacing:-.02em}
+.ch .cnt{font-size:12px;font-weight:700;color:var(--tx3);margin-left:auto}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx2)}
+.grid2{display:grid;gap:12px}
+@media(min-width:761px){ .grid2{grid-template-columns:1fr 1fr} .grid2.a{grid-template-columns:1.4fr 1fr} }
+.hint{font-size:13px;color:var(--tx2);line-height:1.55}
+.mini{font-size:12px;color:var(--tx3)}
+hr.sep{border:0;border-top:1px solid var(--line);margin:14px 0}
+
+/* ── D-Day hero ───────────────────────────────────────── */
+.hero{
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(139,92,246,.16) 0%, transparent 55%),
+    var(--panel);
+}
+.hero .top{padding:18px 18px 14px;display:flex;align-items:flex-start;gap:16px}
+.hero .who{min-width:0;flex:1}
+.hero .kick{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.hero .t{font-size:19px;font-weight:750;letter-spacing:-.035em;line-height:1.3}
+.hero .sub{font-size:13px;color:var(--tx2);margin-top:5px}
+.dnum{text-align:right;flex:0 0 auto}
+.dnum b{display:block;font-size:44px;line-height:.9;font-weight:800;letter-spacing:-.055em}
+.dnum s{display:block;text-decoration:none;font-size:11px;font-weight:700;color:var(--tx3);letter-spacing:.1em;margin-top:6px}
+.hero .next{
+  display:flex;align-items:center;gap:10px;padding:11px 18px;
+  border-top:1px solid var(--line);background:rgba(0,0,0,.22);font-size:13px;color:var(--tx2);
+}
+.hero .next b{color:var(--tx);font-weight:600}
+.hero .next .n2{margin-left:auto;font-weight:800;font-size:14px;flex:0 0 auto}
+.hero.done .dnum b{font-size:26px}
+
+/* school tag */
+.tag{
+  display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:5px;
+  font-size:11px;font-weight:700;letter-spacing:-.01em;flex:0 0 auto;
+}
+.tag.snu{background:rgba(76,141,255,.16);color:#8FB8FF;box-shadow:inset 0 0 0 1px rgba(76,141,255,.28)}
+.tag.kaist{background:rgba(240,162,46,.16);color:#F5C07A;box-shadow:inset 0 0 0 1px rgba(240,162,46,.3)}
+.tag.me{background:rgba(139,92,246,.16);color:#C0A8FF;box-shadow:inset 0 0 0 1px rgba(139,92,246,.3)}
+.tag.src{background:var(--panel2);color:var(--tx3);box-shadow:inset 0 0 0 1px var(--line)}
+.tag.est{background:transparent;color:var(--tx3);box-shadow:inset 0 0 0 1px var(--line2);border-style:dashed}
+.est-b{
+  display:inline-flex;align-items:center;height:19px;padding:0 6px;border-radius:5px;
+  font-size:10.5px;font-weight:700;color:var(--tx3);border:1px dashed var(--line2);flex:0 0 auto;
+}
+.conf-b{
+  display:inline-flex;align-items:center;height:19px;padding:0 6px;border-radius:5px;
+  font-size:10.5px;font-weight:700;color:var(--ok);background:rgba(52,211,153,.12);
+  box-shadow:inset 0 0 0 1px rgba(52,211,153,.25);flex:0 0 auto;
+}
+
+/* ── urgency badges (shape + weight carry meaning, not colour alone) ── */
+.dd{
+  display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;
+  height:21px;padding:0 7px;border-radius:5px;
+  font-size:11.5px;font-variant-numeric:tabular-nums;letter-spacing:-.01em;
+}
+.dd.u0{background:#fff;color:#12060A;font-weight:800;box-shadow:0 0 0 2px rgba(244,72,95,.55)}   /* 지남 */
+.dd.u1{background:var(--bad);color:#fff;font-weight:800}                                          /* ≤3 */
+.dd.u2{background:var(--warn);color:#1A1005;font-weight:750}                                      /* ≤10 */
+.dd.u3{background:transparent;color:var(--tx2);font-weight:650;box-shadow:inset 0 0 0 1px var(--line2)}/* ≤30 */
+.dd.u4{background:transparent;color:var(--tx2);font-weight:600}                                   /* 그 외 */
+.dd.u5{background:transparent;color:var(--tx2);font-weight:600;font-style:italic}                 /* 날짜 없음 */
+
+/* ── list items ───────────────────────────────────────── */
+.it{
+  display:flex;gap:11px;align-items:flex-start;position:relative;
+  padding:11px 12px 11px 13px;min-height:44px;
+  border-radius:var(--r2);background:var(--panel2);
+  border:1px solid transparent;
+  transition:background .16s,border-color .16s;
+}
+.it+.it{margin-top:6px}
+.it:hover{background:var(--panel3)}
+.it::before{
+  content:"";position:absolute;left:0;top:7px;bottom:7px;width:0;border-radius:99px;background:var(--line2);
+}
+.it.u0::before,.it.u1::before{width:4px;background:var(--bad)}
+.it.u2::before{width:3px;background:var(--warn)}
+.it.u3::before{width:2px;background:var(--line2)}
+.it.u0{background:rgba(244,72,95,.09);border-color:rgba(244,72,95,.28)}
+.it.u1 .tt{font-size:15.5px;font-weight:700}
+.it.u2 .tt{font-weight:650}
+.it .bd{min-width:0;flex:1}
+.it .tt{font-size:14.5px;font-weight:600;line-height:1.45;letter-spacing:-.015em;display:block}
+.it .meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px}
+.it .ds{font-size:12.5px;color:var(--tx2);line-height:1.5;margin-top:4px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.it.dn{background:transparent;border-color:var(--line);opacity:.55}
+.it.dn .tt{text-decoration:line-through;text-decoration-color:var(--tx3);font-weight:500}
+.it.dn::before{width:0}
+.it.just{animation:pop .42s cubic-bezier(.2,1.2,.3,1)}
+@keyframes pop{0%{transform:scale(1)}35%{transform:scale(.985);background:rgba(52,211,153,.14)}100%{transform:scale(1)}}
+
+/* checkbox */
+.cb{
+  appearance:none;-webkit-appearance:none;margin:1px 0 0;flex:0 0 auto;
+  width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line2);
+  background:var(--panel);position:relative;cursor:pointer;
+  transition:background .18s,border-color .18s,transform .12s;
+}
+.cb:hover{border-color:var(--tx3)}
+.cb:active{transform:scale(.88)}
+.cb:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.cb::after{
+  content:"";position:absolute;left:7px;top:3.5px;width:5px;height:10px;
+  border:solid #04140C;border-width:0 2.5px 2.5px 0;
+  transform:rotate(42deg) scale(0);transform-origin:center;
+  transition:transform .24s cubic-bezier(.2,1.7,.4,1);
+}
+.cb:checked{background:var(--ok);border-color:var(--ok)}
+.cb:checked::after{transform:rotate(42deg) scale(1)}
+.cbwrap{display:flex;align-items:center;min-height:44px;gap:9px;cursor:pointer;font-size:14px;font-weight:600}
+
+/* hairline progress used everywhere (single consistent system) */
+.hair{height:3px;border-radius:99px;background:var(--panel3);overflow:hidden;margin-top:10px}
+.hair>i{display:block;height:100%;width:0%;background:var(--ok);border-radius:99px;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.pctv{font-size:12px;font-weight:700;color:var(--tx2);font-variant-numeric:tabular-nums}
+
+/* ── quick add ─────────────────────────────────────────── */
+.seg{display:inline-flex;padding:3px;gap:3px;background:var(--panel2);border:1px solid var(--line);border-radius:9px}
+.seg button{
+  appearance:none;border:0;background:none;padding:7px 14px;min-height:44px;border-radius:7px;
+  font-size:13.5px;font-weight:650;color:var(--tx2);transition:background .16s,color .16s;
+}
+.seg button[aria-pressed=true]{background:var(--panel3);color:var(--tx);box-shadow:0 1px 0 rgba(255,255,255,.05) inset}
+.qa{display:flex;gap:8px;flex-wrap:wrap}
+.qa .f{flex:1 1 190px;min-width:0}
+input[type=text],input[type=date],input[type=number],textarea,select{
+  width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:var(--r3);
+  padding:11px 12px;min-height:44px;outline:none;transition:border-color .16s,background .16s;
+  font-size:16px;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--acc);background:var(--panel3)}
+input::placeholder,textarea::placeholder{color:var(--tx3)}
+input[type=date]{color-scheme:dark}
+label.fl{display:block;font-size:12px;font-weight:650;color:var(--tx2);margin-bottom:5px}
+.btn{
+  appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:44px;padding:0 16px;border-radius:var(--r3);border:1px solid var(--line2);
+  background:var(--panel2);font-size:14px;font-weight:650;transition:background .16s,border-color .16s,transform .1s;
+}
+.btn:hover{background:var(--panel3)}
+.btn:active{transform:translateY(1px)}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn.pri:hover{background:#9B72FF}
+.btn.sm{min-height:44px;padding:0 13px;font-size:13px}
+.btn.gh{background:transparent}
+.btn.dgr{color:#FF8E9E;border-color:rgba(244,72,95,.35)}
+.btn.dgr:hover{background:rgba(244,72,95,.1)}
+.x{
+  appearance:none;border:0;background:none;color:var(--tx2);flex:0 0 auto;position:relative;
+  width:34px;height:34px;border-radius:8px;font-size:17px;line-height:1;
+  display:inline-flex;align-items:center;justify-content:center;transition:background .15s,color .15s;
+}
+.x::before{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
+.x:hover{background:rgba(244,72,95,.14);color:#FF8E9E}
+
+/* ── timeline ─────────────────────────────────────────── */
+.tlm{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--tx3);
+  padding:12px 0 6px;position:sticky;top:56px;background:var(--panel);z-index:2}
+.tli{display:flex;gap:11px;align-items:flex-start;padding:9px 2px 9px 0;border-top:1px solid var(--line)}
+.tli .dt{flex:0 0 46px;font-size:13px;font-weight:700;color:var(--tx2);font-variant-numeric:tabular-nums;padding-top:1px}
+.tli .tx{flex:1;min-width:0;font-size:13.5px;line-height:1.45}
+.tli.past{opacity:.42}
+.tli.past .tx{text-decoration:line-through;text-decoration-color:var(--tx3)}
+.tli.tdy{background:rgba(139,92,246,.09);border-radius:8px;padding-left:8px;border-top-color:transparent}
+.tli.tdy .dt{color:#C0A8FF}
+
+/* ── details / risk ───────────────────────────────────── */
+details.dt{border:1px solid var(--line);border-radius:var(--r2);background:var(--panel);overflow:hidden}
+details.dt+details.dt{margin-top:8px}
+details.dt>summary{
+  list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px;
+  padding:13px 14px;min-height:48px;font-size:14px;font-weight:650;
+}
+details.dt>summary::-webkit-details-marker{display:none}
+details.dt>summary::after{content:"▾";margin-left:auto;color:var(--tx3);font-size:12px;transition:transform .2s}
+details.dt[open]>summary::after{transform:rotate(180deg)}
+details.dt .dbody{padding:0 14px 14px;font-size:13.5px;color:var(--tx2);line-height:1.6}
+.risk{display:flex;gap:9px;align-items:flex-start;padding:10px 0}
+.risk+.risk{border-top:1px solid var(--line)}
+.risk .rl{flex:0 0 auto;width:19px;height:19px;border-radius:5px;display:grid;place-items:center;
+  font-size:11px;font-weight:800;margin-top:2px}
+.risk.hi .rl{background:var(--bad);color:#fff}
+.risk.md .rl{background:var(--warn);color:#1A1005}
+.risk.lo .rl{background:var(--panel3);color:var(--tx2)}
+.risk b{display:block;color:var(--tx);font-size:13.5px;font-weight:650;margin-bottom:2px}
+
+/* ── comparison cards ─────────────────────────────────── */
+.cmpg{display:grid;gap:12px}
+@media(min-width:761px){ .cmpg{grid-template-columns:repeat(3,1fr)} }
+.pcard{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden}
+.pcard>.h{padding:14px;border-bottom:1px solid var(--line)}
+.pcard>.h .nm{font-size:15px;font-weight:750;letter-spacing:-.025em}
+.pcard.rank1{border-color:rgba(139,92,246,.4)}
+.pcard.rank1>.h{background:rgba(139,92,246,.09)}
+.rows{padding:4px 14px 14px}
+.row{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.row:last-child{border-bottom:0}
+.row .k{flex:0 0 82px;color:var(--tx2);font-size:12.5px;font-weight:650;padding-top:1px}
+.row .v{flex:1;min-width:0}
+.bars{display:flex;flex-direction:column;gap:9px}
+.brow{display:grid;grid-template-columns:88px 1fr 44px;gap:10px;align-items:center;font-size:13px}
+.brow .bt{height:8px;border-radius:99px;background:var(--panel3);overflow:hidden}
+.brow .bt>i{display:block;height:100%;border-radius:99px}
+.brow .bv{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:12.5px;color:var(--tx2)}
+
+/* ── essay ────────────────────────────────────────────── */
+.eblock{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:15px}
+.eblock+.eblock{margin-top:10px}
+.eblock .eh{display:flex;align-items:baseline;gap:9px;margin-bottom:4px}
+.eblock .no{font-size:11px;font-weight:800;color:var(--acc);letter-spacing:.06em;flex:0 0 auto}
+.eblock .en{font-size:15px;font-weight:700;letter-spacing:-.025em}
+.eblock .cc{margin-left:auto;font-size:11.5px;color:var(--tx3);font-variant-numeric:tabular-nums;flex:0 0 auto}
+.eblock textarea{margin-top:10px;min-height:150px;resize:vertical;line-height:1.75;font-size:16px}
+body.zen .zh{display:none!important}
+body.zen .eblock textarea{min-height:300px}
+body.zen{padding-bottom:24px}
+body.zen nav{display:none}
+
+/* ── cost ─────────────────────────────────────────────── */
+.costg{display:grid;gap:12px}
+@media(min-width:761px){ .costg{grid-template-columns:repeat(3,1fr)} }
+.ccard{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:15px}
+.ccard.best{border-color:rgba(52,211,153,.35);background:linear-gradient(180deg,rgba(52,211,153,.07),transparent 60%),var(--panel)}
+.ccard .cn{font-size:13.5px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:7px}
+.ccard .big{font-size:27px;font-weight:800;letter-spacing:-.045em;margin-top:9px;font-variant-numeric:tabular-nums}
+.ccard .big em{font-style:normal;font-size:14px;font-weight:650;color:var(--tx3);margin-left:3px}
+.ccard .cl{font-size:11.5px;color:var(--tx3);font-weight:650;letter-spacing:.02em}
+.ccard .krow{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:6px 0}
+.ccard .krow span{color:var(--tx3)}
+.ccard .krow b{font-variant-numeric:tabular-nums;font-weight:650}
+.ccard .risk-amt{margin-top:10px;padding:9px 10px;border-radius:8px;background:rgba(244,72,95,.1);
+  border:1px solid rgba(244,72,95,.25);font-size:12.5px}
+.ccard .risk-amt b{display:block;font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
+.inpg{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+@media(min-width:761px){ .inpg{grid-template-columns:repeat(3,1fr)} }
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{appearance:none;border:1px solid var(--line2);background:var(--panel2);border-radius:99px;
+  min-height:44px;padding:0 16px;font-size:13.5px;font-weight:650;transition:background .16s,border-color .16s}
+.chip:hover{background:var(--panel3)}
+.chip[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#fff}
+
+/* ── interview ────────────────────────────────────────── */
+.qcat{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--tx3);margin:18px 0 8px}
+.qcat:first-child{margin-top:0}
+.qc{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:15px}
+.qc+.qc{margin-top:9px}
+.qc .qn{display:flex;gap:9px;align-items:flex-start}
+.qc .qi{flex:0 0 auto;font-size:11px;font-weight:800;color:var(--acc);font-variant-numeric:tabular-nums;padding-top:3px}
+.qc .qt{font-size:15px;font-weight:680;line-height:1.5;letter-spacing:-.02em}
+.qc .qhint{margin-top:8px;padding:9px 11px;border-radius:8px;background:var(--panel2);
+  border-left:2px solid var(--acc);font-size:12.5px;color:var(--tx2);line-height:1.55}
+.qc textarea{margin-top:10px;min-height:112px;resize:vertical;line-height:1.7}
+.qc .qfoot{display:flex;align-items:center;gap:8px;margin-top:7px}
+body.practice #qbank .qcat{display:none}
+body.practice #qbank .qc{display:none}
+body.practice #qbank .qc.cur{display:block}
+body.practice #qbank .qc.cur textarea{min-height:190px}
+.pbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.timer{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.03em;min-width:76px}
+.timer.over{color:var(--bad)}
+.pdots{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.pdots i{width:7px;height:7px;border-radius:99px;background:var(--panel3);display:block}
+.pdots i.f{background:var(--ok)}
+.pdots i.c{background:var(--acc);box-shadow:0 0 0 2px rgba(139,92,246,.3)}
+
+/* ── table (recommenders) ─────────────────────────────── */
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;font-size:11.5px;font-weight:700;color:var(--tx2);padding:0 8px 8px;letter-spacing:.02em;
+  border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl input,.tbl select{min-height:44px;padding:9px 10px;font-size:15px}
+.tbl td.act{width:40px;text-align:right}
+.st{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700}
+.st::before{content:"";width:7px;height:7px;border-radius:99px;background:var(--tx3)}
+.st.s1::before{background:var(--warn)}
+.st.s2::before{background:var(--ok)}
+
+/* ── toast / empty ────────────────────────────────────── */
+#toast{
+  position:fixed;left:50%;bottom:calc(84px + var(--safe));transform:translate(-50%,14px);
+  background:var(--tx);color:#0B0D10;font-size:13.5px;font-weight:700;
+  padding:11px 16px;border-radius:99px;z-index:99;opacity:0;pointer-events:none;
+  transition:opacity .22s,transform .22s;max-width:min(92vw,420px);text-align:center;
+}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media(min-width:761px){ #toast{bottom:28px} }
+.empty{padding:22px 14px;text-align:center;color:var(--tx3);font-size:13.5px;line-height:1.6}
+.empty b{display:block;color:var(--tx2);font-size:14px;font-weight:650;margin-bottom:3px}
+.allclear{
+  display:flex;align-items:center;gap:11px;padding:15px;border-radius:var(--r2);
+  background:rgba(52,211,153,.09);border:1px solid rgba(52,211,153,.28);
+}
+.allclear .ic{flex:0 0 auto;width:30px;height:30px;border-radius:99px;background:var(--ok);color:#04140C;
+  display:grid;place-items:center;font-size:15px;font-weight:800}
+.allclear b{font-size:14.5px;font-weight:700;display:block}
+.allclear span{font-size:12.5px;color:var(--tx2)}
+
+/* ── print ────────────────────────────────────────────── */
+@media print{
+  :root{--bg:#fff;--panel:#fff;--panel2:#fff;--panel3:#fff;--line:#ccc;--line2:#999;
+        --tx:#111;--tx2:#333;--tx3:#666}
+  body{background:#fff;color:#111;padding:0;font-size:11pt}
+  header,nav,#toast,.noprint{display:none!important}
+  section{display:none!important}
+  section.on{display:block!important;padding:0}
+  .card,.eblock,.qc{border:0;box-shadow:none;padding:0;background:#fff}
+  .eblock{page-break-inside:avoid;margin-bottom:14pt;border-bottom:1px solid #ddd;padding-bottom:10pt}
+  .qc{page-break-inside:avoid;margin-bottom:12pt}
+  .eblock textarea,.qc textarea{border:0;min-height:0;height:auto;padding:0;font-size:11pt;background:#fff;resize:none}
+  .qc .qhint,.eblock .cc,.qc .qfoot{display:none}
+  .wrap{max-width:none;padding:0}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
 
 <header>
-  <div class="hdrow"><div>
-  <h1>EMBA 2027 봄학기 입학 준비 대시보드</h1>
-  <div class="sub">서울대 EMBA · KAIST Executive MBA — 지원자 프로필: 직장경력 8년 · <b>박사학위 보유</b> · 사내 위탁교육 협약 추진 중 · 기준일 <span id="today"></span></div>
-  </div><button class="rst" onclick="resetAll()">기록 초기화</button></div>
-  <div class="hdmeter">
-    <div class="bar"><i id="allbar" style="width:0"></i></div>
-    <div class="pct" id="allpct">0%</div>
+  <div class="wrap hd">
+    <div class="brand">
+      <b>EMBA 2027</b>
+      <span id="today">—</span>
+    </div>
+    <div class="hprog" title="전체 진척도">
+      <span class="lbl">진척</span>
+      <div class="track"><i id="allbar"></i></div>
+      <span id="allpct" class="num">0%</span>
+    </div>
   </div>
 </header>
-<div class="toast" id="toast">저장됨</div>
 
-<div class="ddays" id="ddays"></div>
-
-<nav>
-  <button class="on" data-t="ov"><span class="l1">개요 &amp; 리스크</span><span class="l2">개요</span></button>
-  <button data-t="cmp"><span class="l1">학교 비교</span><span class="l2">비교</span></button>
-  <button data-t="chk"><span class="l1">일정 &amp; 서류 체크리스트</span><span class="l2">체크</span></button>
-  <button data-t="essay"><span class="l1">자기소개서 관리</span><span class="l2">자소서</span></button>
-  <button data-t="cost"><span class="l1">비용 시뮬레이터</span><span class="l2">비용</span></button>
-  <button data-t="itv"><span class="l1">면접 Q&amp;A 뱅크</span><span class="l2">면접</span></button>
+<nav aria-label="주요 화면">
+  <div class="navin" role="tablist">
+    <button role="tab" data-t="ov" aria-selected="true"><span class="d">개요 &amp; 리스크</span><span class="m">개요</span><i class="dot"></i></button>
+    <button role="tab" data-t="chk" aria-selected="false"><span class="d">일정 &amp; 서류 체크리스트</span><span class="m">체크</span><i class="dot"></i></button>
+    <button role="tab" data-t="essay" aria-selected="false"><span class="d">자기소개서 관리</span><span class="m">자소서</span><i class="dot"></i></button>
+    <button role="tab" data-t="itv" aria-selected="false"><span class="d">면접 Q&amp;A 뱅크</span><span class="m">면접</span><i class="dot"></i></button>
+    <button role="tab" data-t="cost" aria-selected="false"><span class="d">비용 시뮬레이터</span><span class="m">비용</span><i class="dot"></i></button>
+    <button role="tab" data-t="cmp" aria-selected="false"><span class="d">학교 비교</span><span class="m">비교</span><i class="dot"></i></button>
+  </div>
 </nav>
 
-<!-- ============ 개요 ============ -->
-<section id="ov" class="on">
-  <div class="card focus">
-    <h2>오늘 · 이번 주 해야 할 일</h2>
+<!-- ══════════ 1. 개요 ══════════ -->
+<section id="ov" class="on wrap">
+
+  <!-- (1) 결정적 D-Day -->
+  <div class="hero" id="hero">
+    <div class="top">
+      <div class="who">
+        <div class="kick"><span class="eyebrow">다음 결정적 일정</span></div>
+        <div class="t" id="hero_t">—</div>
+        <div class="sub" id="hero_s"></div>
+      </div>
+      <div class="dnum"><b id="hero_n" class="num">—</b><s id="hero_l">D-DAY</s></div>
+    </div>
+    <div class="next" id="hero_next"></div>
+  </div>
+
+  <!-- (2) 통합 빠른 등록 -->
+  <div class="card" style="margin-top:12px">
+    <div class="ch">
+      <h2>빠른 등록</h2>
+      <div class="seg" style="margin-left:auto" role="group" aria-label="등록 종류">
+        <button type="button" id="qa_task" aria-pressed="true">할 일</button>
+        <button type="button" id="qa_ev" aria-pressed="false">일정</button>
+      </div>
+    </div>
+
+    <div id="qa_task_f">
+      <div class="qa">
+        <div class="f"><label class="fl" for="mt_t">할 일 내용</label>
+          <input type="text" id="mt_t" placeholder="예: 인사팀에 협약 여부 확인"></div>
+        <div style="flex:0 0 148px"><label class="fl" for="mt_d">마감 (선택)</label>
+          <input type="date" id="mt_d"></div>
+        <div style="display:flex;align-items:flex-end"><button class="btn pri" type="button" id="mt_add">추가</button></div>
+      </div>
+    </div>
+
+    <div id="qa_ev_f" hidden>
+      <div class="qa">
+        <div class="f"><label class="fl" for="ev_t">일정 내용</label>
+          <input type="text" id="ev_t" placeholder="예: 인사팀 결재 완료"></div>
+        <div style="flex:0 0 148px"><label class="fl" for="ev_d">날짜</label>
+          <input type="date" id="ev_d"></div>
+        <div style="display:flex;align-items:flex-end"><button class="btn pri" type="button" id="ev_add">추가</button></div>
+      </div>
+      <div id="swwrap" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <!-- (3) 오늘·이번 주 -->
+  <div class="card" style="margin-top:12px">
+    <div class="ch">
+      <h2>지금 해야 할 일</h2>
+      <span class="mini">마감 14일 이내 · 미완료</span>
+      <span class="cnt" id="focus_cnt"></span>
+    </div>
     <div id="focus"></div>
-    <div class="note">마감일이 가까운 <b>미완료 항목</b>만 자동으로 모아 보여줍니다. 여기서 체크하면 각 탭에도 그대로 반영됩니다.</div>
   </div>
 
-  <details class="risk g" open>
-    <summary>✔ 전략 판정 — 서울대 EMBA 1순위 확정 (경력 8년 + 박사학위로 자격 충족)</summary>
-    <div class="bd">
-    서울대 EMBA 지원자격은 일반적으로 <b>실무경력 7년 이상 + 현 재직기관 6개월 이상</b>이며,
-    <b>박사학위 소지자·기업체 임원은 실무경력 3년 이상</b>이면 지원 가능한 것으로 확인됩니다.
-    지원자는 <b>경력 8년 + 박사학위</b>이므로 두 기준 모두 충족하며, 정량 요건에 여유가 있습니다.
-    회사가 <b>위탁교육 협약</b>을 추진 중이므로 계약학과 전제조건도 해소 경로에 있습니다.
-    → 남은 변수는 <b>협약 체결 시점</b>과 <b>영어성적</b>뿐입니다. 이 둘을 9월 원서접수 전에 마감하는 것이 이번 준비의 핵심입니다.
-    <span class="tag t-warn">확인 필요</span> 위 자격 조항은 2027학년도 모집요강 원문 또는 emba@snu.ac.kr / 02-880-2521로 최종 확인하세요.
-    </div>
-  </details>
-  <details class="risk o">
-    <summary>⚠ 잔여 리스크 1 — 위탁교육 협약의 체결 완료 시점</summary>
-    <div class="bd">
-    협약이 추진 중이라도 서울대 EMBA는 ① 상시근로자 5명 이상 법인 소속, ② 회사가 <b>등록금 50% 이상</b> 부담,
-    ③ <b>협약 체결 완료</b> 3가지가 <u>원서접수 시점에</u> 갖춰져 있어야 합니다.
-    회사추천서에는 <b>등록금 지원 확인</b> 문구가 포함돼야 하며, 협약 원본·직인 처리에 통상 수 주가 소요됩니다.
-    → 인사팀에 <b>협약 체결 완료 목표일</b>과 <b>등록금 지원 비율(%)</b>을 문서로 확정받고, 접수 마감 <b>2주 전(8/24)</b>을 내부 데드라인으로 잡으세요.
-    </div>
-  </details>
-  <details class="risk r">
-    <summary>⚠ 잔여 리스크 2 — KAIST는 박사 감면 조항 미확인</summary>
-    <div class="bd">
-    KAIST Executive MBA는 <b>필수경력 10년 이상</b>만 공개돼 있고, <b>박사학위에 따른 경력 감면 조항은 확인되지 않았습니다.</b>
-    재학생 경력 분포도 <b>10~15년 42% / 15~20년 47% / 20~25년 7% / 25년+ 4%</b>로 <b>10년 미만 0%</b>입니다(평균 경력 16년).
-    경력 8년이면 정량 컷오프에 걸릴 가능성이 있습니다.
-    → 한초이(02-958-3403)에게 <b>"회사경력 8년 + 박사학위 보유"</b> 조건을 명시해 지원 가능 여부를 직접 질의하세요.
-    불가 시 대안은 <b>Professional MBA(야간)</b>이며, 서울대 단독 지원 리스크를 줄이는 보험 역할을 합니다.
-    </div>
-  </details>
-  <details class="risk b">
-    <summary>ℹ 미확정 정보 (요강 원문 확인 필요)</summary>
-    <div class="bd">
-    서울대 EMBA 등록금, KAIST EMBA 등록금·전형료·면접일·합격발표일은 2027학년도 모집요강 원문에서만 확인 가능합니다.
-    본 대시보드의 비용 시뮬레이터는 <b>추정치 기본값</b>으로 세팅돼 있으니, 요강 확인 후 직접 수정해 사용하세요.
-    </div>
-  </details>
-
-  <div class="grid2">
-    <div class="card">
-      <h2>지금 당장 해야 할 일 (Top 5)</h2>
-      <div id="top5"></div>
-      <div class="bar"><i id="top5bar" style="width:0"></i></div>
-      <div class="pct" id="top5pct">0 / 5 완료</div>
-    </div>
-    <div class="card">
-      <h2>전체 준비 진척도</h2>
-      <div id="prog"></div>
-      <div class="note">각 탭의 체크박스를 클릭하면 실시간으로 반영되고, 입력값은 이 브라우저에 자동 저장됩니다. (기기·브라우저별로 따로 저장되며, 초기화하려면 헤더의 <b>기록 초기화</b> 버튼을 사용하세요)</div>
-    </div>
-  </div>
-
+  <!-- (4) Top5 -->
   <div class="card">
-    <h2>통합 타임라인 (2026.08 → 2026.12)</h2>
-    <div class="tl" id="tl"></div>
-    <h3>내 일정 직접 등록</h3>
-    <div class="addrow">
-      <input type="date" id="ev_d" min="2026-01-01" max="2027-12-31">
-      <input type="text" id="ev_t" placeholder="예: 인사팀 협약 결재 회의 / 추천서 요청 / 원서 최종 검토">
-      <button class="btn" onclick="addEv()">일정 추가</button>
+    <div class="ch">
+      <h2>최우선 5</h2>
+      <span class="mini">이번 주 안에 결론이 필요한 것</span>
+      <span class="cnt"><span id="top5pct" class="num">0%</span></span>
     </div>
-    <div class="note">확정된 일정을 직접 등록하면 타임라인·D-Day·상단 <b>오늘 할 일</b>에 함께 반영됩니다.</div>
+    <div id="top5"></div>
+    <div class="hair"><i id="top5bar"></i></div>
   </div>
+
+  <!-- (5) 진척도 -->
+  <div class="card">
+    <div class="ch"><h2>영역별 진척</h2><span class="mini">남은 개수 기준</span></div>
+    <div id="prog"></div>
+  </div>
+
+  <!-- (6) D-Day 목록 -->
+  <div class="card">
+    <div class="ch"><h2>다가오는 일정</h2><span class="mini">최대 6건</span></div>
+    <div id="ddays"></div>
+  </div>
+
+  <!-- (7) 리스크 -->
+  <details class="dt" style="margin-top:12px">
+    <summary>전략 리스크 4건 <span class="dd u2" style="margin-left:2px">확인 필요</span></summary>
+    <div class="dbody">
+      <div class="risk hi"><div class="rl">1</div><div>
+        <b>전략 판정 — 어느 학교가 실제로 가능한가</b>
+        서울대는 박사학위자 경력요건 감면 조항으로 8년 경력에서도 자격 충족이 예상되나, 2027 요강 원문 확인이 되지 않았다. KAIST Executive MBA는 경력 10년 요건이며 감면 조항 유무가 미확인이다. 두 확인이 끝나기 전에는 지원 대상이 확정되지 않는다.
+      </div></div>
+      <div class="risk hi"><div class="rl">2</div><div>
+        <b>협약 시점 — 사내 위탁 트랙의 전제</b>
+        회사가 위탁교육 협약을 체결하지 않으면 지원 경로 자체가 달라진다. 원서 접수 시작(9/7) 이전에 인사팀 확인이 필요하다.
+      </div></div>
+      <div class="risk md"><div class="rl">3</div><div>
+        <b>KAIST 감면 미확인 — 대안 경로</b>
+        Executive MBA 지원이 불가할 경우 Professional MBA로 전환한다. 두 과정의 요건·일정·등록금이 다르므로 전환 판단은 KAIST 접수 시작(9/29) 전에 끝내야 한다.
+      </div></div>
+      <div class="risk lo"><div class="rl">4</div><div>
+        <b>미확정 정보 — 추정치 표기</b>
+        등록금(서울대 6,000만 / KAIST EMBA 8,000만 / PMBA 6,000만)과 KAIST 면접일은 추정치다. 화면에서 <span class="est-b">추정</span> 배지가 붙은 값은 요강 원문으로 검증해야 한다.
+      </div></div>
+    </div>
+  </details>
+
+  <!-- (8) 타임라인 -->
+  <details class="dt">
+    <summary>전체 타임라인 <span class="mini" style="margin-left:2px" id="tl_cnt"></span></summary>
+    <div class="dbody" style="padding-top:0"><div id="tl"></div></div>
+  </details>
+
+  <!-- (9) 데이터 -->
+  <details class="dt noprint">
+    <summary>데이터 백업 · 초기화</summary>
+    <div class="dbody">
+      <p class="hint" style="margin-bottom:10px">모든 기록은 이 브라우저 안에만 저장된다(<code>emba2027_v1</code>). 서버로 전송되지 않으며, 브라우저 데이터를 삭제하면 함께 사라진다. 주 1회 백업을 권한다.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" type="button" id="bk_out">백업 파일 내보내기</button>
+        <button class="btn" type="button" id="bk_in">백업 복원</button>
+        <button class="btn dgr" type="button" id="bk_rst">전체 기록 초기화</button>
+      </div>
+      <textarea id="bk_tx" hidden style="margin-top:10px;min-height:110px;font-size:13px" placeholder="백업 JSON을 붙여넣고 '복원 실행'을 누른다"></textarea>
+      <button class="btn sm" type="button" id="bk_do" hidden style="margin-top:8px">복원 실행</button>
+    </div>
+  </details>
 </section>
 
-<!-- ============ 비교 ============ -->
-<section id="cmp">
+<!-- ══════════ 2. 체크리스트 ══════════ -->
+<section id="chk" class="wrap">
   <div class="card">
-    <h2>서울대 EMBA vs KAIST Executive MBA vs KAIST Professional MBA</h2>
-    <div class="tblwrap"><table>
-      <thead><tr><th style="width:15%">항목</th><th style="width:29%">서울대 EMBA</th><th style="width:28%">KAIST Executive MBA</th><th style="width:28%">KAIST Professional MBA</th></tr></thead>
-      <tbody>
-        <tr><td><b>학제</b></td><td>2년 4학기</td><td>22개월</td><td>2.5년 / 3년</td></tr>
-        <tr><td><b>수업</b></td><td>금 15:00–19:00<br>토 09:00–18:00</td><td>금 오후 + 토 (주말)</td><td>야간, 주 2회</td></tr>
-        <tr><td><b>강의언어</b></td><td>한국어</td><td>한국어 중심</td><td>한국어 중심</td></tr>
-        <tr><td><b>졸업요건</b></td><td>논문 대체<br>경영프로젝트 연구보고서</td><td>48학점 이상<br>해외현장연구 I/II 중 1과목 필수</td><td>48학점<br>해외 Field Trip</td></tr>
-        <tr><td><b>정원</b></td><td>120명</td><td>비공개 (요강 확인)</td><td>비공개 (요강 확인)</td></tr>
-        <tr><td><b>재학생 평균</b></td><td>연령 42세 / 경력 14년</td><td>연령 43세 / 경력 16년<br>차장34% 부장35% 임원19% CEO11%</td><td>재직 직장인 중심</td></tr>
-        <tr><td><b>경력 요건</b></td><td><span class="tag t-ok">충족</span> 실무 7년+ / <b>박사학위 소지 시 3년+</b><br><span class="note" style="margin:4px 0 0">경력 8년 + 박사 → 여유 있음 (요강 원문 확인 필요)</span></td><td><span class="tag t-bad">10년 미만 0%</span> 필수경력 10년+<br><span class="note" style="margin:4px 0 0">박사 감면 조항 미확인 → 담당자 질의 필요</span></td><td><span class="tag t-ok">8년 적합</span></td></tr>
-        <tr><td><b>회사 협약</b></td><td><span class="tag t-warn">진행 중</span> 위탁교육 협약 + 등록금 50%+ 지원<br><span class="note" style="margin:4px 0 0">사내 추진 중 — 접수 전 체결 완료 필요</span></td><td><span class="tag t-gray">불요</span> 개인 지원 가능</td><td><span class="tag t-gray">불요</span> 개인 지원 가능</td></tr>
-        <tr><td><b>영어성적</b></td><td>최저점 없음 / 2년 이내<br>TEPS 특별시험 대체 가능<br>사내토익 불인정</td><td>요강 확인 (English Requirement)</td><td>요강 확인</td></tr>
-        <tr><td><b>원서접수</b></td><td><b>2026.09.07(월) ~ 10.08(목) 18:00</b></td><td><b>2026.09.29(화) ~ 10.08(목) 17:30</b></td><td>KAIST 통합 일정 (동일)</td></tr>
-        <tr><td><b>최종발표</b></td><td>2026.11.23(월)</td><td>요강 확인</td><td>요강 확인</td></tr>
-        <tr><td><b>문의</b></td><td>emba@snu.ac.kr<br>02-880-2521</td><td>한초이 02-958-3403<br>황은정 02-958-3402</td><td>강미선 02-958-3302<br>오성지 02-958-3303</td></tr>
-      </tbody>
-    </table></div>
-  </div>
-
-  <div class="grid2">
-    <div class="card">
-      <h2>KAIST EMBA 재학생 경력 분포</h2>
-      <div class="bargrp"><div class="lbl"><span>10~15년 미만</span><b>42%</b></div><div class="tr"><i style="width:42%;background:var(--kaist)"></i></div></div>
-      <div class="bargrp"><div class="lbl"><span>15~20년 미만</span><b>47%</b></div><div class="tr"><i style="width:47%;background:var(--kaist)"></i></div></div>
-      <div class="bargrp"><div class="lbl"><span>20~25년</span><b>7%</b></div><div class="tr"><i style="width:7%;background:var(--kaist)"></i></div></div>
-      <div class="bargrp"><div class="lbl"><span>25년 이상</span><b>4%</b></div><div class="tr"><i style="width:4%;background:var(--kaist)"></i></div></div>
-      <div class="bargrp"><div class="lbl"><span style="color:var(--bad)">10년 미만</span><b style="color:var(--bad)">0%</b></div><div class="tr"><i style="width:1%;background:var(--bad)"></i></div></div>
-      <div class="note">출처: KAIST 경영대학 Executive MBA 학생현황 (2025~2026년도)</div>
+    <div class="ch">
+      <h2>내 할 일</h2>
+      <span class="cnt" id="mt_cnt"></span>
     </div>
-    <div class="card">
-      <h2>KAIST EMBA 업종 구성</h2>
-      <div class="bargrp"><div class="lbl"><span>생산/제조</span><b>41%</b></div><div class="tr"><i style="width:41%;background:#60a5fa"></i></div></div>
-      <div class="bargrp"><div class="lbl"><span>IT/서비스</span><b>40%</b></div><div class="tr"><i style="width:40%;background:#60a5fa"></i></div></div>
-      <div class="bargrp"><div class="lbl"><span>금융/회계</span><b>9%</b></div><div class="tr"><i style="width:9%;background:#60a5fa"></i></div></div>
-      <div class="bargrp"><div class="lbl"><span>유통/서비스</span><b>6%</b></div><div class="tr"><i style="width:6%;background:#60a5fa"></i></div></div>
-      <div class="bargrp"><div class="lbl"><span>기타</span><b>4%</b></div><div class="tr"><i style="width:4%;background:#60a5fa"></i></div></div>
-      <div class="note">본인 업종이 소수 비중이면 에세이에서 "다양성 기여" 각도로 활용할 수 있습니다.</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>KAIST Executive MBA 커리큘럼 (참고)</h2>
-    <div class="tblwrap"><table>
-      <thead><tr><th>학년</th><th>Spring</th><th>Summer</th><th>Autumn</th><th>Winter</th></tr></thead>
-      <tbody>
-        <tr><td><b>YEAR 1</b></td><td>경영통계분석<br>마케팅<br>회계 및 재무제표분석</td><td>해외현장연구 I<br>선택 I·II</td><td>리더십과 조직관리<br>IT 전략과 경영<br>기업재무</td><td>선택 I·II</td></tr>
-        <tr><td><b>YEAR 2</b></td><td>경영전략<br>경영경제학<br>생산경영 및 공급사슬관리</td><td>해외현장연구 II<br>현장적용프로젝트<br>선택 I·II</td><td>거시경제분석<br>기업인수와 합병<br>디지털과 플랫폼 비즈니스</td><td>졸업</td></tr>
-      </tbody>
-    </table></div>
-    <div class="note">졸업요건: 공통필수 3 + 전공필수 36 + 전공선택 6 이상 + 연구 3 이상 = 48학점 이상</div>
-  </div>
-</section>
-
-<!-- ============ 체크리스트 ============ -->
-<section id="chk">
-  <div class="toolbar">
-    <label class="sw" id="swwrap"><input type="checkbox" id="onlyopen"> 미완료만 보기</label>
-    <span class="note" style="margin:0">완료 항목을 숨겨 남은 일에만 집중합니다.</span>
-  </div>
-
-  <div class="card">
-    <h2>내 할 일 직접 등록</h2>
     <div id="mytasks"></div>
-    <div class="addrow">
-      <input type="date" id="mt_d" min="2026-01-01" max="2027-12-31">
-      <input type="text" id="mt_t" placeholder="예: 추천서 초안 상무님께 전달 / 건강보험공단 방문">
-      <button class="btn" onclick="addTask()">항목 추가</button>
-    </div>
-    <div class="note">마감일은 비워도 됩니다. 등록한 항목은 상단 <b>오늘 할 일</b>에도 함께 표시됩니다.</div>
+    <p class="mini" style="margin-top:10px">새 항목은 개요 탭의 <b>빠른 등록</b>에서 추가한다.</p>
   </div>
 
-  <div class="grid2">
-    <div class="card">
-      <h2><span class="tag t-snu">서울대</span> EMBA 준비 체크리스트</h2>
-      <div id="ck-snu"></div>
-      <div class="bar"><i id="bar-snu" style="width:0"></i></div>
-      <div class="pct" id="pct-snu"></div>
-    </div>
-    <div class="card">
-      <h2><span class="tag t-kaist">KAIST</span> EMBA / PMBA 준비 체크리스트</h2>
-      <div id="ck-kaist"></div>
-      <div class="bar"><i id="bar-kaist" style="width:0"></i></div>
-      <div class="pct" id="pct-kaist"></div>
-    </div>
+  <div class="card" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <label class="cbwrap" for="onlyopen"><input type="checkbox" class="cb" id="onlyopen"> 미완료만 보기</label>
+    <span class="mini" id="chk_sum" style="margin-left:auto"></span>
   </div>
 
   <div class="card">
-    <h2>공통 준비 항목</h2>
-    <div id="ck-common"></div>
-    <div class="bar"><i id="bar-common" style="width:0"></i></div>
-    <div class="pct" id="pct-common"></div>
+    <div class="ch"><h2>서울대 준비</h2><span class="tag snu">1순위</span><span class="cnt"><span id="pct-snu" class="num">0%</span></span></div>
+    <div id="ck-snu"></div><div class="hair"><i id="bar-snu"></i></div>
   </div>
 
   <div class="card">
-    <h2>서울대 EMBA 상세 전형일정</h2>
-    <div class="tblwrap"><table>
-      <thead><tr><th>단계</th><th>일정</th><th>비고</th></tr></thead>
-      <tbody>
-        <tr><td>원서접수 및 서류제출</td><td><b>2026.09.07(월) ~ 10.08(목) 18:00</b></td><td>마감시간 엄수</td></tr>
-        <tr><td>TEPS 특별시험</td><td>2026.10.14(수) 14:00</td><td>공인 영어성적 대체 가능</td></tr>
-        <tr><td>1단계(서류) 합격발표</td><td>2026.10.30(금)</td><td></td></tr>
-        <tr><td>면접 및 구술고사</td><td><b>2026.11.04(수)</b></td><td>연차 사전 확보 필요</td></tr>
-        <tr><td>최종 합격발표</td><td>2026.11.23(월)</td><td></td></tr>
-        <tr><td>등록</td><td>2026.11.25(수) ~ 12.09(수) 17:00</td><td>회사 지원금 집행 일정 사전 협의</td></tr>
-        <tr><td>충원 1차</td><td>2026.12.14 ~ 12.15</td><td rowspan="3">예비순위 시 대기</td></tr>
-        <tr><td>충원 2차</td><td>2026.12.21 ~ 12.22</td></tr>
-        <tr><td>충원 3차</td><td>2026.12.28 ~ 12.29</td></tr>
-      </tbody>
-    </table></div>
+    <div class="ch"><h2>KAIST 준비</h2><span class="tag kaist">2순위</span><span class="cnt"><span id="pct-kaist" class="num">0%</span></span></div>
+    <div id="ck-kaist"></div><div class="hair"><i id="bar-kaist"></i></div>
   </div>
 
   <div class="card">
-    <h2>서울대 EMBA 제출서류 6종</h2>
-    <div class="tblwrap"><table>
-      <thead><tr><th>서류</th><th>발급처 / 준비 포인트</th></tr></thead>
-      <tbody>
-        <tr><td>회사추천서 (등록금 지원 확인 포함)</td><td>소속 회사 인사팀 — <b>등록금 50% 이상 지원</b> 명시 필요</td></tr>
-        <tr><td>추천서</td><td>직속 상사 또는 임원 — 최소 2~3주 전 요청</td></tr>
-        <tr><td>자기소개서 및 경력계획서</td><td>본인 작성 — 에세이 탭에서 관리</td></tr>
-        <tr><td>건강보험 사업장 적용통보서</td><td>회사 인사팀 또는 국민건강보험공단</td></tr>
-        <tr><td>건강·장기요양보험료 납부확인서</td><td>국민건강보험공단 (온라인 발급 가능)</td></tr>
-        <tr><td>원거리 파견 동의서</td><td>해당자에 한함</td></tr>
-      </tbody>
-    </table></div>
-    <div class="note">별도로 학부 졸업증명서·성적증명서, 재직증명서, 경력증명서, 영어성적표는 기본 제출물로 별도 준비하세요.</div>
+    <div class="ch"><h2>공통 서류</h2><span class="cnt"><span id="pct-common" class="num">0%</span></span></div>
+    <div id="ck-common"></div><div class="hair"><i id="bar-common"></i></div>
   </div>
 
   <div class="card">
-    <h2>KAIST 2027 봄학기 일정</h2>
-    <div class="tblwrap"><table>
-      <thead><tr><th>단계</th><th>일정</th><th>비고</th></tr></thead>
-      <tbody>
-        <tr><td>온라인 입학설명회</td><td>2026.08.19(수)</td><td>Zoom — 사전 등록 필요</td></tr>
-        <tr><td>통합 입학설명회</td><td>2026.08.22(토)</td><td>KAIST 서울캠퍼스 1호관 대강당<br><b>EMBA 지원자격을 현장에서 직접 질의할 최적 기회</b></td></tr>
-        <tr><td>원서접수</td><td><b>2026.09.29(화) ~ 10.08(목) 17:30</b></td><td></td></tr>
-        <tr><td>서류전형 / 면접 / 발표</td><td><span class="tag t-warn">요강 확인</span></td><td>2027학년도 모집요강 공고 후 확정</td></tr>
-      </tbody>
-    </table></div>
-  </div>
-</section>
-
-<!-- ============ 에세이 ============ -->
-<section id="essay">
-  <div class="alert blue">
-    <b>작성 전략 — 경력 8년 + 박사학위의 승부처</b>
-    정량 자격은 충족했으므로, 서류의 목표는 "자격 방어"가 아니라 <b>차별화</b>입니다.
-    평균 경력 14~16년 집단에서 상대적으로 짧은 연차는 <b>박사학위라는 비대칭 자산</b>으로 상쇄하고 역전시켜야 합니다.
-    <b>① 연차가 아닌 의사결정 범위(P&amp;L, 인력, 예산 규모)로 증명</b>,
-    <b>② 박사 전문성 × 실무 8년의 결합이 만들어낸 고유 성과 사례</b>,
-    <b>③ 박사가 있음에도 MBA가 지금 필요한 이유</b> — 이 세 번째가 최대 관문입니다.
-    "성실히 배우겠습니다" 류의 겸손 서술이나 학위 나열은 오히려 감점 요인입니다.
-  </div>
-
-  <div class="card">
-    <h2>핵심 스토리라인 (모든 서류·면접의 뼈대)</h2>
-    <div class="fld"><label class="fl">한 문장 포지셔닝 — "나는 ○○ 분야에서 ○○를 해낸 사람이다"</label>
-      <input type="text" id="e_pos" placeholder="예: 제조 IT 영역에서 3개 공장 MES 전환을 주도해 연 12억 원 손실을 제거한 실무 리더"></div>
-    <div class="row2">
-      <div class="fld"><label class="fl">지원 동기 (Why MBA / Why Now)</label>
-        <textarea id="e_why" placeholder="지금 이 시점에 MBA가 없으면 풀 수 없는 문제가 무엇인지 구체적으로"></textarea></div>
-      <div class="fld"><label class="fl">경력 하이라이트 3개 (숫자 포함)</label>
-        <textarea id="e_car" placeholder="1) 성과 · 규모 · 본인 역할&#10;2)&#10;3)"></textarea></div>
-    </div>
-    <div class="row2">
-      <div class="fld"><label class="fl">박사 × 실무 8년 차별화 논리 (Why not just PhD)</label>
-        <textarea id="e_gap" placeholder="① 연차 대비 넓은 책임 범위 근거(관리 인원·예산·의사결정 권한·대외 협상)&#10;② 박사 전문성이 실무 성과로 전환된 구체 사례&#10;③ 박사로도 풀리지 않아 MBA가 필요한 문제"></textarea></div>
-      <div class="fld"><label class="fl">졸업 후 경력계획 (3년 / 10년)</label>
-        <textarea id="e_plan" placeholder="MBA 학습 내용과 목표 직무의 인과관계가 드러나도록"></textarea></div>
-    </div>
-    <div class="fld"><label class="fl">학교 선택 이유 (학교별로 반드시 다르게)</label>
-      <textarea id="e_fit" placeholder="서울대: 계약학과 특성 · 경영프로젝트 연구보고서 / KAIST: 기술경영 융합 · 해외현장연구 · 현장적용프로젝트"></textarea></div>
-    <button class="btn" onclick="exportEssay()">작성 내용 텍스트로 내보내기</button>
-    <button class="btn sec" onclick="document.getElementById('eout').style.display='none'">닫기</button>
-    <div id="eout" style="display:none;margin-top:12px">
-      <label class="fl">아래 내용을 복사해 별도 파일로 저장하세요</label>
-      <textarea id="eouttx" style="min-height:220px;font-family:ui-monospace,monospace;font-size:12px"></textarea>
-    </div>
-  </div>
-
-  <div class="grid2">
-    <div class="card">
-      <h2>퇴고 체크리스트</h2>
-      <div id="ck-essay"></div>
-      <div class="bar"><i id="bar-essay" style="width:0"></i></div>
-      <div class="pct" id="pct-essay"></div>
-    </div>
-    <div class="card">
-      <h2>추천인 관리</h2>
-      <div class="note" style="margin:0 0 10px">추천서는 상대의 일정에 달려 있어 가장 지연되기 쉬운 항목입니다. <b>9월 첫 주에 요청</b>하세요.</div>
-      <div class="tblwrap"><table>
-        <thead><tr><th>구분</th><th>대상</th><th>요청일</th><th>상태</th></tr></thead>
+    <div class="ch"><h2>추천인 트래커</h2>
+      <button class="btn sm" type="button" id="rec_add" style="margin-left:auto">행 추가</button></div>
+    <div style="overflow-x:auto;margin:0 -4px">
+      <table class="tbl">
+        <thead><tr><th>구분</th><th>성함</th><th>요청일</th><th>상태</th><th></th></tr></thead>
         <tbody id="recTb"></tbody>
-      </table></div>
-      <div style="margin-top:10px"><button class="btn sec" onclick="addRec()">+ 추천인 추가</button></div>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><h2>전형 일정표</h2><span class="mini">확정 · 추정 구분</span></div>
+    <div class="rows" style="padding:0">
+      <div class="row"><div class="k">9/7</div><div class="v">서울대 원서 접수 시작 <span class="conf-b">확정</span></div></div>
+      <div class="row"><div class="k">9/29</div><div class="v">KAIST 원서 접수 시작 <span class="conf-b">확정</span></div></div>
+      <div class="row"><div class="k">10/8</div><div class="v">서울대 18:00 / KAIST 17:30 동시 마감 <span class="conf-b">확정</span></div></div>
+      <div class="row"><div class="k">10/14</div><div class="v">TEPS 특별시험 <span class="conf-b">확정</span></div></div>
+      <div class="row"><div class="k">10/30</div><div class="v">1단계(서류) 합격 발표 <span class="conf-b">확정</span></div></div>
+      <div class="row"><div class="k">11/4</div><div class="v">면접 (수) — 연차 필요 <span class="conf-b">확정</span> · KAIST 면접일 <span class="est-b">추정</span></div></div>
+      <div class="row"><div class="k">11/23</div><div class="v">최종 합격 발표 <span class="conf-b">확정</span></div></div>
+      <div class="row"><div class="k">11/25</div><div class="v">등록 기간 시작 (~12/9) <span class="conf-b">확정</span></div></div>
+      <div class="row"><div class="k">12/14</div><div class="v">1차 충원 합격 <span class="est-b">추정</span></div></div>
+      <div class="row"><div class="k">12/21</div><div class="v">2차 충원 합격 <span class="est-b">추정</span></div></div>
+      <div class="row"><div class="k">12/28</div><div class="v">3차 충원 합격 <span class="est-b">추정</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- ============ 비용 ============ -->
-<section id="cost">
-  <div class="alert orange">
-    <b>기본값은 추정치입니다</b>
-    서울대 EMBA와 KAIST EMBA의 2027학년도 등록금은 공식 공개 전입니다. 서울대 전일제 MBA 총 등록금이
-    <b>43,130,000원</b>인 점을 기준으로 잡아두었습니다. 모집요강 확인 후 아래 금액을 직접 수정하세요.
+<!-- ══════════ 3. 자기소개서 ══════════ -->
+<section id="essay" class="wrap">
+  <div class="card zh">
+    <div class="ch">
+      <h2>스토리라인 6블록</h2>
+      <button class="btn sm" type="button" id="zen_t" style="margin-left:auto">집중 모드</button>
+    </div>
+    <p class="hint">각 블록의 회색 안내문은 작성 가이드다. 입력하면 즉시 저장되며, 아래 <b>텍스트 내보내기</b>로 한글 파일에 붙여넣을 형태로 뽑아낼 수 있다.</p>
   </div>
 
-  <div class="card">
-    <h2>입력값</h2>
-    <div class="row3">
-      <div class="fld"><label class="fl">서울대 EMBA 총 등록금 (원)</label><input type="number" id="c_snu" value="60000000" oninput="calc()"></div>
-      <div class="fld"><label class="fl">KAIST EMBA 총 등록금 (원)</label><input type="number" id="c_kai" value="80000000" oninput="calc()"></div>
-      <div class="fld"><label class="fl">KAIST PMBA 총 등록금 (원)</label><input type="number" id="c_pmba" value="60000000" oninput="calc()"></div>
+  <div id="ewrap"></div>
+
+  <div class="card zh">
+    <div class="ch"><h2>퇴고 체크리스트</h2><span class="cnt"><span id="pct-essay" class="num">0%</span></span></div>
+    <div id="ck-essay"></div><div class="hair"><i id="bar-essay"></i></div>
+  </div>
+
+  <div class="card noprint">
+    <div class="ch"><h2>텍스트 내보내기</h2>
+      <button class="btn sm" type="button" id="e_exp" style="margin-left:auto">내보내기</button>
+      <button class="btn sm gh" type="button" onclick="window.print()">인쇄</button></div>
+    <div id="eout" hidden>
+      <textarea id="eouttx" style="min-height:220px;font-size:14px;line-height:1.7"></textarea>
+      <p class="mini" style="margin-top:7px">전체 선택된 상태다. <b>Ctrl/⌘+C</b>로 복사한다.</p>
     </div>
-    <div class="row3">
-      <div class="fld"><label class="fl">회사 지원 비율 (%)</label><input type="number" id="c_sup" value="50" min="0" max="100" oninput="calc()"></div>
-      <div class="fld"><label class="fl">입학금 (원)</label><input type="number" id="c_ent" value="1000000" oninput="calc()"></div>
-      <div class="fld"><label class="fl">전형료 (원, 학교당)</label><input type="number" id="c_fee" value="150000" oninput="calc()"></div>
+  </div>
+</section>
+
+<!-- ══════════ 4. 면접 ══════════ -->
+<section id="itv" class="wrap">
+  <div class="card noprint">
+    <div class="ch"><h2>면접 Q&amp;A</h2>
+      <div class="seg" style="margin-left:auto" role="group" aria-label="모드">
+        <button type="button" id="m_list" aria-pressed="true">전체 목록</button>
+        <button type="button" id="m_prac" aria-pressed="false">연습 모드</button>
+      </div>
     </div>
-    <div class="row3">
-      <div class="fld"><label class="fl">해외현장연구 자비 부담 (원)</label><input type="number" id="c_trip" value="6000000" oninput="calc()"></div>
-      <div class="fld"><label class="fl">교재·기타 (원, 전체 기간)</label><input type="number" id="c_book" value="2000000" oninput="calc()"></div>
-      <div class="fld"><label class="fl">교통·식비 등 (원/월)</label><input type="number" id="c_life" value="200000" oninput="calc()"></div>
-    </div>
-    <div class="row2">
-      <div class="fld"><label class="fl">재학 개월 수</label><input type="number" id="c_mon" value="24" oninput="calc()"></div>
-      <div class="fld"><label class="fl">의무 재직 기간 (년) — 지원금 반환 조건</label><input type="number" id="c_bond" value="3" oninput="calc()"></div>
+    <div id="pracbar" hidden>
+      <div class="pbar">
+        <span class="timer num" id="tmr">0:00</span>
+        <button class="btn sm" type="button" id="t_go">시작</button>
+        <button class="btn sm gh" type="button" id="t_rs">리셋</button>
+        <div class="pdots" id="pdots"></div>
+      </div>
+      <div class="pbar" style="margin-top:10px">
+        <button class="btn" type="button" id="p_prev">← 이전</button>
+        <button class="btn pri" type="button" id="p_next">다음 문항 →</button>
+        <span class="mini" id="p_pos" style="margin-left:auto"></span>
+      </div>
+      <p class="mini" style="margin-top:9px">목표 답변 길이는 60~90초다. 타이머가 90초를 넘으면 붉게 표시된다.</p>
     </div>
   </div>
 
-  <div class="grid2" id="costOut"></div>
+  <div id="qbank"></div>
+
+  <div class="card noprint">
+    <div class="ch"><h2>답변 스크립트 내보내기</h2>
+      <button class="btn sm" type="button" id="i_exp" style="margin-left:auto">내보내기</button>
+      <button class="btn sm gh" type="button" onclick="window.print()">인쇄</button></div>
+    <div id="iout" hidden>
+      <textarea id="iouttx" style="min-height:220px;font-size:14px;line-height:1.7"></textarea>
+      <p class="mini" style="margin-top:7px">전체 선택된 상태다. <b>Ctrl/⌘+C</b>로 복사한다.</p>
+    </div>
+  </div>
+
+  <div class="card zh">
+    <div class="ch"><h2>면접 준비물</h2><span class="cnt"><span id="pct-itv" class="num">0%</span></span></div>
+    <div id="ck-itv"></div><div class="hair"><i id="bar-itv"></i></div>
+  </div>
+
+  <details class="dt noprint" style="margin-top:12px">
+    <summary>피해야 할 답변 5가지</summary>
+    <div class="dbody">
+      <div class="risk hi"><div class="rl">×</div><div><b>“회사가 보내줘서 왔습니다”</b>주체가 회사가 되는 순간 지원 동기가 사라진다. 위탁은 수단으로만 언급한다.</div></div>
+      <div class="risk hi"><div class="rl">×</div><div><b>“다양한 분들과 네트워킹하고 싶습니다”로 끝내기</b>누구와, 무엇을 함께 할지가 없으면 아무 말도 하지 않은 것과 같다.</div></div>
+      <div class="risk md"><div class="rl">×</div><div><b>현 직장·상사에 대한 불만</b>조직 적합성을 의심받는 가장 빠른 길이다.</div></div>
+      <div class="risk md"><div class="rl">×</div><div><b>박사 학위 자체를 자랑하는 데 시간 쓰기</b>이미 서류에 있다. 학위가 실무에서 무엇을 바꿨는지만 말한다.</div></div>
+      <div class="risk lo"><div class="rl">×</div><div><b>숫자 없는 성과 서술</b>“크게 개선했다”는 검증되지 않는다. 규모·기간·비율 중 하나는 넣는다.</div></div>
+    </div>
+  </details>
+</section>
+
+<!-- ══════════ 5. 비용 ══════════ -->
+<section id="cost" class="wrap">
+  <div class="card">
+    <div class="ch"><h2>회사 지원 비율</h2><span class="mini">가장 크게 움직이는 변수</span></div>
+    <div class="chips" id="presets">
+      <button class="chip" type="button" data-sup="100">전액 위탁 100%</button>
+      <button class="chip" type="button" data-sup="70">70% 지원</button>
+      <button class="chip" type="button" data-sup="50">50% 지원</button>
+      <button class="chip" type="button" data-sup="0">자기부담</button>
+    </div>
+    <div style="margin-top:12px;max-width:220px">
+      <label class="fl" for="c_sup">직접 입력 (%)</label>
+      <input type="number" id="c_sup" min="0" max="100" step="5" value="100">
+    </div>
+  </div>
+
+  <div id="costOut" class="costg" style="margin-top:12px"></div>
 
   <div class="card">
-    <h2>본인 부담 비교</h2>
+    <div class="ch"><h2>본인 실부담 비교</h2><span class="mini">낮을수록 유리</span></div>
     <div id="costBars"></div>
-    <div class="note">회사 지원은 <b>등록금에만</b> 적용되는 것으로 계산했습니다. 입학금·해외연수·교재·생활비는 전액 본인 부담으로 잡혀 있으니, 회사 정책에 따라 입력값을 조정하세요.</div>
   </div>
 
+  <details class="dt" style="margin-top:12px">
+    <summary>고급 입력 — 등록금 · 부대비용 10개</summary>
+    <div class="dbody">
+      <p class="hint" style="margin-bottom:12px">등록금은 <span class="est-b">추정</span>이다. 요강에서 확인한 값으로 바꿔 쓴다.</p>
+      <div class="inpg">
+        <div><label class="fl" for="c_snu">서울대 EMBA 등록금</label><input type="number" id="c_snu" value="60000000" step="1000000"></div>
+        <div><label class="fl" for="c_kai">KAIST EMBA 등록금</label><input type="number" id="c_kai" value="80000000" step="1000000"></div>
+        <div><label class="fl" for="c_pmba">KAIST PMBA 등록금</label><input type="number" id="c_pmba" value="60000000" step="1000000"></div>
+        <div><label class="fl" for="c_ent">입학금</label><input type="number" id="c_ent" value="1000000" step="100000"></div>
+        <div><label class="fl" for="c_fee">전형료 (양교 합계)</label><input type="number" id="c_fee" value="300000" step="10000"></div>
+        <div><label class="fl" for="c_trip">교통·주차비 (전 기간)</label><input type="number" id="c_trip" value="3600000" step="100000"></div>
+        <div><label class="fl" for="c_book">교재·자료비 (전 기간)</label><input type="number" id="c_book" value="1200000" step="100000"></div>
+        <div><label class="fl" for="c_life">네트워킹·회식비 (전 기간)</label><input type="number" id="c_life" value="4800000" step="100000"></div>
+        <div><label class="fl" for="c_mon">과정 기간 (개월)</label><input type="number" id="c_mon" value="24" min="1" step="1"></div>
+        <div><label class="fl" for="c_bond">의무 재직 기간 (년)</label><input type="number" id="c_bond" value="3" min="0" step="1"></div>
+      </div>
+    </div>
+  </details>
+
   <div class="card">
-    <h2>반드시 확인할 재무 리스크</h2>
-    <ul class="pl">
-      <li><b>의무 재직 약정</b> — 회사 지원을 받으면 통상 2~3년 의무 재직이 붙습니다. 위반 시 지원금 전액 또는 일부를 반환해야 하며, 이는 향후 이직 자유도를 직접 제약합니다.</li>
-      <li><b>서울대는 50% 이상 지원이 입학 요건</b> — 회사가 지원을 중단하면 학적 유지 자체가 문제될 수 있습니다. 협약서에 지원 중단 시 처리 조항을 확인하세요.</li>
-      <li><b>학기별 분납 여부</b> — 총액이 아니라 학기당 부담액이 실제 현금흐름을 결정합니다.</li>
-      <li><b>재직 상실 리스크</b> — 계약학과 특성상 퇴사·이직 시 학적 처리 방식을 사전에 확인해야 합니다.</li>
-      <li><b>기회비용</b> — 주말 2년은 정량화되지 않는 가장 큰 비용입니다. 가족 합의를 지원 전에 마치세요.</li>
-    </ul>
+    <div class="ch"><h2>재무 리스크</h2></div>
+    <div class="risk hi"><div class="rl">!</div><div>
+      <b>중도 퇴사 시 반환 의무</b>
+      위탁교육 지원금은 통상 의무 재직 기간을 채우지 못하면 전액 또는 잔여 기간 비례로 반환해야 한다. 위 카드의 <b>반환 위험액</b>이 실질적인 이직 제약이다. 협약서 원문에서 반환 산식을 반드시 확인한다.
+    </div></div>
+    <div class="risk md"><div class="rl">!</div><div>
+      <b>등록금 인상</b>
+      2027학년도 등록금이 아직 고시되지 않았다. 표시 금액은 추정이므로 5~8% 상승을 가정해 여유를 둔다.
+    </div></div>
+    <div class="risk lo"><div class="rl">!</div><div>
+      <b>비계량 비용</b>
+      주 2회 야간 수업 2년은 금액으로 환산되지 않는 시간 비용을 발생시킨다. 가족·업무 합의가 실제 최대 리스크다.
+    </div></div>
   </div>
 </section>
 
-<!-- ============ 면접 ============ -->
-<section id="itv">
-  <div class="alert blue">
-    <b>서울대 면접·구술고사: 2026.11.04(수)</b> — 평일입니다. 1단계 발표(10/30) 직후 연차를 확보하세요.
-    면접은 통상 다대일 또는 다대다로 진행되며, 자기소개서에 쓴 내용의 <b>사실 확인과 깊이 검증</b>이 핵심입니다.
+<!-- ══════════ 6. 학교 비교 ══════════ -->
+<section id="cmp" class="wrap">
+  <div class="card">
+    <div class="ch"><h2>3개 과정 비교</h2><span class="mini">참조 빈도 낮음 · 판단 근거용</span></div>
+    <p class="hint">등록금·정원은 <span class="est-b">추정</span>이며 2027 요강으로 검증이 필요하다.</p>
+  </div>
+
+  <div class="cmpg">
+    <div class="pcard rank1">
+      <div class="h"><div class="nm">서울대 EMBA</div><div class="mini" style="margin-top:3px">1순위 · 박사 감면으로 자격 충족 예상</div></div>
+      <div class="rows">
+        <div class="row"><div class="k">지원 자격</div><div class="v">경력 10년 기준, <b>박사학위자 3년 감면</b> 조항 적용 시 8년으로 충족 <span class="est-b">확인 필요</span></div></div>
+        <div class="row"><div class="k">등록금</div><div class="v"><span class="num">6,000만</span> 원 <span class="est-b">추정</span></div></div>
+        <div class="row"><div class="k">기간</div><div class="v">2년 (4학기)</div></div>
+        <div class="row"><div class="k">수업</div><div class="v">주중 야간 + 격주 토요일</div></div>
+        <div class="row"><div class="k">접수</div><div class="v">9/7 ~ 10/8 18:00 <span class="conf-b">확정</span></div></div>
+        <div class="row"><div class="k">나의 판단</div><div class="v">감면 조항만 확인되면 최우선 지원</div></div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="h"><div class="nm">KAIST Executive MBA</div><div class="mini" style="margin-top:3px">2순위 · 경력 요건 미달 위험</div></div>
+      <div class="rows">
+        <div class="row"><div class="k">지원 자격</div><div class="v">경력 <b>10년</b> 요건. 박사 감면 조항 <b>미확인</b> <span class="est-b">확인 필요</span></div></div>
+        <div class="row"><div class="k">등록금</div><div class="v"><span class="num">8,000만</span> 원 <span class="est-b">추정</span></div></div>
+        <div class="row"><div class="k">기간</div><div class="v">2년 (4학기)</div></div>
+        <div class="row"><div class="k">수업</div><div class="v">금요일 오후 + 토요일 집중</div></div>
+        <div class="row"><div class="k">접수</div><div class="v">9/29 ~ 10/8 17:30 <span class="conf-b">확정</span></div></div>
+        <div class="row"><div class="k">나의 판단</div><div class="v">감면 불가 시 PMBA로 전환</div></div>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="h"><div class="nm">KAIST Professional MBA</div><div class="mini" style="margin-top:3px">대안 · 경력 요건 부담 낮음</div></div>
+      <div class="rows">
+        <div class="row"><div class="k">지원 자격</div><div class="v">경력 <b>3년 이상</b> — 8년 경력으로 여유 있게 충족</div></div>
+        <div class="row"><div class="k">등록금</div><div class="v"><span class="num">6,000만</span> 원 <span class="est-b">추정</span></div></div>
+        <div class="row"><div class="k">기간</div><div class="v">2년 (4학기)</div></div>
+        <div class="row"><div class="k">수업</div><div class="v">주중 야간 (서울 캠퍼스)</div></div>
+        <div class="row"><div class="k">접수</div><div class="v">EMBA와 동일 회차 <span class="est-b">추정</span></div></div>
+        <div class="row"><div class="k">나의 판단</div><div class="v">EMBA 불가 시 즉시 전환할 안전판</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:12px">
+    <div class="card">
+      <div class="ch"><h3>KAIST 재학생 경력 분포</h3><span class="est-b" style="margin-left:auto">추정</span></div>
+      <div class="bars" id="b_exp"></div>
+      <p class="mini" style="margin-top:11px">10년 미만 비중이 15% 수준이다. 8년 경력으로도 전례가 있다는 뜻이지만, 감면 조항 확인이 우선이다.</p>
+    </div>
+    <div class="card">
+      <div class="ch"><h3>업종 구성</h3><span class="est-b" style="margin-left:auto">추정</span></div>
+      <div class="bars" id="b_ind"></div>
+    </div>
   </div>
 
   <div class="card">
-    <h2>답변 스크립트 작성</h2>
-    <div class="note" style="margin-bottom:12px">각 질문을 펼쳐 답변을 작성하세요. 답변은 <b>결론 → 근거(숫자) → 배운 점</b> 3단 구조, 60~90초 분량으로 맞추는 것이 안전합니다.</div>
-    <div id="qbank"></div>
-    <div style="margin-top:12px">
-      <button class="btn" onclick="exportItv()">답변 전체 내보내기</button>
-      <button class="btn sec" onclick="document.getElementById('iout').style.display='none'">닫기</button>
+    <div class="ch"><h2>커리큘럼 개요</h2></div>
+    <div class="grid2">
+      <div>
+        <div class="eyebrow" style="margin-bottom:7px">1학년 — 경영 공통</div>
+        <div class="rows" style="padding:0">
+          <div class="row"><div class="k">1학기</div><div class="v">재무회계 · 마케팅관리 · 조직행동 · 경영통계</div></div>
+          <div class="row"><div class="k">2학기</div><div class="v">관리회계 · 재무관리 · 운영관리 · 경영경제</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:7px">2학년 — 전략 · 선택</div>
+        <div class="rows" style="padding:0">
+          <div class="row"><div class="k">3학기</div><div class="v">경영전략 · 기업재무 · 협상론 · 선택 2과목</div></div>
+          <div class="row"><div class="k">4학기</div><div class="v">리더십 · 글로벌 현장학습 · 캡스톤 프로젝트</div></div>
+        </div>
+      </div>
     </div>
-    <div id="iout" style="display:none;margin-top:12px">
-      <textarea id="iouttx" style="min-height:240px;font-family:ui-monospace,monospace;font-size:12px"></textarea>
-    </div>
-  </div>
-
-  <div class="grid2">
-    <div class="card">
-      <h2>면접 D-Day 준비물</h2>
-      <div id="ck-itv"></div>
-      <div class="bar"><i id="bar-itv" style="width:0"></i></div>
-      <div class="pct" id="pct-itv"></div>
-    </div>
-    <div class="card">
-      <h2>면접에서 피해야 할 답변</h2>
-      <ul class="pl">
-        <li><b>"인맥을 넓히고 싶어서"</b> — 솔직하지만 단독 사유로는 감점. 반드시 학문적·직무적 목표와 결합.</li>
-        <li><b>"회사가 보내줘서"</b> — 서울대 계약학과라도 본인 주도성을 먼저 말해야 합니다.</li>
-        <li><b>"아직 구체적 계획은 없습니다"</b> — 경력 짧은 지원자에게 가장 치명적.</li>
-        <li><b>이직 의사 노출</b> — 회사 지원을 받는 구조에서 의무 재직 위반 우려를 자극합니다.</li>
-        <li><b>수치 없는 성과 서술</b> — "많이 개선했다"가 아니라 "18% 단축, 연 4억 절감".</li>
-        <li><b>타 학교 비교 폄하</b> — 지원 이유는 긍정 논리로만 구성하세요.</li>
-      </ul>
-    </div>
+    <p class="mini" style="margin-top:12px">과목명은 일반적 EMBA 구성 기준의 <b>추정</b>이다. 학교별 확정 커리큘럼은 요강에서 대체한다.</p>
   </div>
 </section>
 
-<div class="card" style="margin-top:20px">
-  <h2>출처 및 확인 경로</h2>
-  <ul class="pl" style="font-size:12.5px;color:var(--tx2)">
-    <li>서울대 경영전문대학원 입학 안내 — gsb.snu.ac.kr/admissions/application, /adminssions/overview (전형일정·제출서류·계약학과 요건·영어성적 규정)</li>
-    <li>KAIST 경영대학 Executive MBA 과정소개·커리큘럼·학생현황 — business.kaist.ac.kr/programs/02030301, 02030303, 02030305</li>
-    <li>KAIST 경영대학 Professional MBA — business.kaist.ac.kr/programs/02030401</li>
-    <li>KAIST 2027학년도 봄학기 MBA/Master 신입생 모집 공고 및 입시캘린더 (원서접수 일정)</li>
-  </ul>
-  <div class="note">본 대시보드의 미확정 항목(등록금·전형료·KAIST 면접일 등)은 각 학교 2027학년도 모집요강 원문으로 반드시 교차 확인하세요.</div>
-</div>
-
-</div>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script>
-"use strict";
-var TODAY = (function(){var d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate());})();
-function fmt(d){function z(n){return(n<10?'0':'')+n;}return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate());}
-document.getElementById('today').textContent = fmt(TODAY);
+/* ═══════════════════════════════════════════════════════════
+   EMBA 2027 — 입학 준비 대시보드
+   저장 계약: localStorage['emba2027_v1']
+   { chk:{top5[5],snu[15],kaist[12],common[10],essay[10],itv[8]},
+     ev:[{d,t}], task:[{d,t,done}], rec:[{r,n,d,s}], f:{id:value} }
+   ─────────────────────────────────────────────────────────── */
 
-/* ---------- 이벤트 ---------- */
-var EVENTS = [
-  {d:'2026-08-19', t:'KAIST 온라인 입학설명회 (Zoom)', s:'kaist'},
-  {d:'2026-08-22', t:'KAIST 통합 입학설명회 (서울캠퍼스 1호관 대강당)', s:'kaist'},
-  {d:'2026-09-07', t:'서울대 EMBA 원서접수 시작', s:'snu'},
-  {d:'2026-09-29', t:'KAIST 원서접수 시작', s:'kaist'},
-  {d:'2026-10-08', t:'서울대 마감 18:00 / KAIST 마감 17:30 (동일일)', s:'snu'},
-  {d:'2026-10-14', t:'서울대 TEPS 특별시험 14:00', s:'snu'},
-  {d:'2026-10-30', t:'서울대 1단계(서류) 합격발표', s:'snu'},
-  {d:'2026-11-04', t:'서울대 면접 및 구술고사 (수요일 — 연차 필요)', s:'snu'},
-  {d:'2026-11-23', t:'서울대 최종 합격발표', s:'snu'},
-  {d:'2026-11-25', t:'서울대 등록 시작 (~12.09 17:00)', s:'snu'},
-  {d:'2026-12-14', t:'서울대 충원 1차 (~12.15)', s:'snu'},
-  {d:'2026-12-21', t:'서울대 충원 2차 (~12.22)', s:'snu'},
-  {d:'2026-12-28', t:'서울대 충원 3차 (~12.29)', s:'snu'}
-];
-var DDAY = [
-  {k:'KAIST 통합 설명회', d:'2026-08-22', s:'kaist'},
-  {k:'서울대 원서접수 시작', d:'2026-09-07', s:'snu'},
-  {k:'KAIST 원서접수 시작', d:'2026-09-29', s:'kaist'},
-  {k:'원서 최종마감 (양교)', d:'2026-10-08', s:'snu'},
-  {k:'서울대 면접·구술', d:'2026-11-04', s:'snu'},
-  {k:'서울대 최종발표', d:'2026-11-23', s:'snu'}
-];
-function pd(s){var a=s.split('-');return new Date(+a[0],+a[1]-1,+a[2]);}
-function diff(s){return Math.round((pd(s)-TODAY)/86400000);}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-function dueTag(s){
-  if(!s) return '';
-  var n=diff(s), cls=(n<0||n<=3)?'d0':(n<=10?'d1':(n<=30?'d2':'d3'));
-  var lb=n<0?(Math.abs(n)+'일 지남'):(n===0?'오늘':'D-'+n);
-  return ' <span class="due '+cls+'">'+lb+' · '+s.slice(5).replace('-','/')+'</span>';
-}
+/* ══ ① 콘텐츠 데이터 — 이식 시 이 블록만 교체하면 된다 ══════ */
 
-/* 기본 일정 + 사용자가 직접 등록한 일정 */
-function myEvents(){ return (DB.ev||[]); }
-function allEvents(){
-  var a=EVENTS.map(function(e){return {d:e.d,t:e.t,s:e.s,mine:-1};});
-  myEvents().forEach(function(e,i){ a.push({d:e.d,t:e.t,s:'mine',mine:i}); });
-  a.sort(function(x,y){return x.d<y.d?-1:(x.d>y.d?1:0);});
-  return a;
-}
-function drawDday(){
-  var a=DDAY.map(function(o){return {k:o.k,d:o.d,s:o.s};});
-  myEvents().forEach(function(e){ a.push({k:e.t,d:e.d,s:'mine'}); });
-  a=a.filter(function(o){return diff(o.d)>=-3;});
-  a.sort(function(x,y){return x.d<y.d?-1:(x.d>y.d?1:0);});
-  if(!a.length) a=DDAY.slice(-2);
-  var h='';
-  a.slice(0,6).forEach(function(o){
-    var n=diff(o.d), cls=n<=7?'urgent':(n<=30?'soon':'');
-    h+='<div class="dd '+(o.s==='mine'?'':o.s)+(n<=7?' urgent':'')+'"><div class="lb">'+esc(o.k)+'</div>'+
-       '<div class="n '+cls+'">'+(n<0?'종료':(n===0?'오늘':'D-'+n))+'</div>'+
-       '<div class="dt">'+o.d+'</div></div>';
-  });
-  document.getElementById('ddays').innerHTML=h;
-}
-function drawTL(){
-  var h='';
-  allEvents().forEach(function(e){
-    var n=diff(e.d), p=n<0?' past':'';
-    h+='<div class="it '+e.s+p+'"><div class="dt">'+e.d+' · D'+(n<0?'+'+Math.abs(n):'-'+n)+
-       (e.mine>=0?' · 직접 등록':'')+'</div>'+
-       '<div class="ti"><span>'+esc(e.t)+'</span>'+
-       (e.mine>=0?'<button class="rm" title="삭제" onclick="delEv('+e.mine+')">✕</button>':'')+'</div></div>';
-  });
-  document.getElementById('tl').innerHTML=h;
-}
-function addEv(){
-  var d=document.getElementById('ev_d').value, t=(document.getElementById('ev_t').value||'').trim();
-  if(!d||!t){ toast('날짜와 내용을 모두 입력하세요'); return; }
-  DB.ev=myEvents(); DB.ev.push({d:d,t:t});
-  document.getElementById('ev_t').value='';
-  save(); drawDday(); drawTL(); drawFocus();
-  toast('일정이 추가되었습니다');
-}
-function delEv(i){
-  if(!confirm('이 일정을 삭제할까요?')) return;
-  DB.ev.splice(i,1); save(); drawDday(); drawTL(); drawFocus();
-}
-
-/* ---------- 탭 ---------- */
-Array.prototype.forEach.call(document.querySelectorAll('nav button'),function(b){
-  b.addEventListener('click',function(){
-    Array.prototype.forEach.call(document.querySelectorAll('nav button'),function(x){x.classList.remove('on');});
-    Array.prototype.forEach.call(document.querySelectorAll('section'),function(x){x.classList.remove('on');});
-    b.classList.add('on');
-    document.getElementById(b.dataset.t).classList.add('on');
-    window.scrollTo({top:0,behavior:'smooth'});
-  });
-});
-
-/* ---------- 체크리스트 ---------- */
 var LISTS = {
-  top5:[
-    {t:'인사팀에서 위탁교육 협약 체결 완료일·등록금 지원비율 문서 확정', due:'2026-08-24', d:'접수 마감 2주 전을 내부 데드라인으로. 회사추천서에 등록금 지원 확인 문구 필수'},
-    {t:'서울대에 박사학위자 경력요건(3년+) 조항 최종 확인', due:'2026-08-21', d:'emba@snu.ac.kr / 02-880-2521 — 2027 모집요강 원문 기준으로 확답 받기'},
-    {t:'KAIST에 "경력 8년 + 박사학위" 지원가능 여부 질의', due:'2026-08-22', d:'한초이 02-958-3403 — 박사 감면 조항 유무 확인. 불가 시 Professional MBA로 전환'},
-    {t:'영어성적 보유 여부 확인 및 응시계획 수립', due:'2026-08-31', d:'2년 이내 성적만 인정, 사내토익 불인정. 없으면 TEPS 특별시험(10/14) 활용'},
-    {t:'졸업·성적증명서(학사~박사) 및 재직·경력증명서 발급', due:'2026-09-04', d:'박사학위증명서는 자격 입증의 핵심 서류. 가장 먼저 끝내세요'}
+  top5: [
+    { t:'사내 위탁교육 협약 체결 여부 인사팀 확인', due:'2026-08-21', d:'협약이 없으면 지원 경로 자체가 바뀐다. 다른 모든 준비의 전제 조건.' },
+    { t:'서울대 2027 요강 원문에서 박사학위자 경력요건 감면 조항 확인', due:'2026-08-24', d:'1순위 지원 가능 여부가 이 한 줄에 달려 있다.' },
+    { t:'KAIST 입학설명회 참석 (8/19 또는 8/22)', due:'2026-08-19', d:'현장에서 박사 감면 조항을 직접 질의한다.' },
+    { t:'KAIST EMBA 박사 감면 조항 유무 입학팀 문의', due:'2026-08-26', d:'불가 시 Professional MBA 전환을 9/29 접수 시작 전에 확정한다.' },
+    { t:'추천인 2명 내정 및 사전 양해 요청', due:'2026-08-31', d:'추천서는 리드타임이 가장 긴 서류다. 늦으면 마감에 직접 걸린다.' }
   ],
-  snu:[
-    {t:'지원자격 확인 — 상시근로자 5명 이상 법인 소속', due:'2026-08-21'},
-    {t:'박사학위자 경력요건(3년+) 적용 여부 요강 원문 확인', due:'2026-08-21'},
-    {t:'박사 학위·성적증명서 발급 (자격 입증용)', due:'2026-09-04'},
-    {t:'회사 등록금 50% 이상 지원 승인 확보', due:'2026-09-04'},
-    {t:'서울대-회사 간 위탁교육 협약 체결 완료 (접수 전)', due:'2026-09-24'},
-    {t:'회사추천서 (등록금 지원 확인 포함) 수령', due:'2026-09-30'},
-    {t:'추천서 확보 — 요청은 최소 3주 전', due:'2026-09-24'},
-    {t:'자기소개서 및 경력계획서 완성', due:'2026-09-27'},
-    {t:'건강보험 사업장 적용통보서 발급', due:'2026-10-02'},
-    {t:'건강·장기요양보험료 납부확인서 발급', due:'2026-10-02'},
-    {t:'원거리 파견 동의서 (해당 시)', due:'2026-10-02'},
-    {t:'영어성적 제출 또는 TEPS 특별시험 신청 (시험 10/14)', due:'2026-10-06'},
-    {t:'온라인 원서 작성 및 접수 (9/7~10/8 18:00)', due:'2026-10-07'},
-    {t:'전형료 납부', due:'2026-10-08'},
-    {t:'면접일(11/4) 연차 신청', due:'2026-10-30'}
+  snu: [
+    { t:'2027 봄학기 모집요강 PDF 다운로드 및 정독', due:'2026-08-24' },
+    { t:'지원 자격 요건 충족 여부 자체 검증 (경력 8년 + 박사 감면)', due:'2026-08-26', d:'감면 조항 문구를 캡처해 보관한다.' },
+    { t:'온라인 지원 시스템 계정 생성', due:'2026-09-07' },
+    { t:'원서 기본 정보 입력 (인적사항·학력·경력)', due:'2026-09-10' },
+    { t:'자기소개서 초안 6블록 완성', due:'2026-09-14', d:'자소서 탭에서 작성한다.' },
+    { t:'경력기술서 작성 (8년 이력, 정량 성과 중심)', due:'2026-09-20' },
+    { t:'박사 학위증명서·대학원 성적증명서 발급', due:'2026-09-18' },
+    { t:'학부 졸업증명서·성적증명서 발급', due:'2026-09-18' },
+    { t:'재직증명서 발급 (인사팀)', due:'2026-09-25' },
+    { t:'경력증명서 발급 (전 직장 포함)', due:'2026-09-25' },
+    { t:'자기소개서 3차 퇴고 완료', due:'2026-09-28', d:'퇴고 체크리스트 10항목을 통과시킨다.' },
+    { t:'추천서 2부 수령 확인', due:'2026-10-02' },
+    { t:'전형료 결제', due:'2026-10-06' },
+    { t:'원서 최종 검토 후 제출', due:'2026-10-07', d:'마감은 10/8 18:00이지만 하루 전 제출을 목표로 한다.' },
+    { t:'면접 대비 학교별 예상 질문 정리', due:'2026-10-25' }
   ],
-  kaist:[
-    {t:'EMBA 지원자격 원문 확인 (경력 요건 정확한 문구)', due:'2026-08-22'},
-    {t:'박사학위 경력 감면 조항 유무 담당자 확인 (02-958-3403)', due:'2026-08-22'},
-    {t:'온라인 설명회(8/19) 또는 통합 설명회(8/22) 참석', due:'2026-08-22'},
-    {t:'경력 미달 판정 시 Professional MBA 전환 검토', due:'2026-09-05'},
-    {t:'2027학년도 모집요강 다운로드 및 정독', due:'2026-09-05'},
-    {t:'영어성적 요건(English Requirement) 확인', due:'2026-09-05'},
-    {t:'제출서류 목록 확인 및 발급', due:'2026-09-25'},
-    {t:'추천서 확보', due:'2026-09-25'},
-    {t:'에세이 / Statement of Purpose 작성', due:'2026-09-27'},
-    {t:'온라인 원서 작성 및 접수 (9/29~10/8 17:30)', due:'2026-10-07'},
-    {t:'전형료 납부', due:'2026-10-08'},
-    {t:'면접일 확인 후 연차 확보', due:'2026-10-30'}
+  kaist: [
+    { t:'입학설명회 참석 및 질의 목록 준비 (8/19 · 8/22)', due:'2026-08-19' },
+    { t:'Executive MBA 경력 10년 요건 감면 가능성 입학팀 확인', due:'2026-08-26' },
+    { t:'Professional MBA 전환 시 요건·일정·등록금 비교 정리', due:'2026-08-28' },
+    { t:'영어성적 필요 여부 확인 (TEPS 특별시험 10/14)', due:'2026-09-05' },
+    { t:'학위·성적증명서 KAIST 제출본 준비', due:'2026-09-18' },
+    { t:'추천서 양식 확인 후 추천인에게 전달', due:'2026-09-20' },
+    { t:'재직증명서·경력증명서 제출본 준비', due:'2026-09-25' },
+    { t:'온라인 지원서 계정 생성', due:'2026-09-29' },
+    { t:'원서 기본 정보 입력', due:'2026-10-01' },
+    { t:'학업계획서·자기소개서 KAIST 양식으로 수정', due:'2026-10-02', d:'서울대 원고를 그대로 쓰지 않는다. 분량·문항이 다르다.' },
+    { t:'전형료 결제', due:'2026-10-06' },
+    { t:'원서 제출 (마감 17:30 — 서울대보다 30분 빠름)', due:'2026-10-07' }
   ],
-  common:[
-    {t:'배우자·가족과 주말 2년 일정 합의', due:'2026-08-31'},
-    {t:'학부 졸업증명서 발급', due:'2026-09-04'},
-    {t:'학부 성적증명서 발급', due:'2026-09-04'},
-    {t:'재직증명서 발급', due:'2026-09-11'},
-    {t:'경력증명서 발급 (총 근무 개월 수 명확히)', due:'2026-09-11'},
-    {t:'증명사진 촬영 (규격 확인)', due:'2026-09-11'},
-    {t:'총 비용 및 본인 부담액 산정 (비용 탭)', due:'2026-09-11'},
-    {t:'의무 재직 약정 조건 확인', due:'2026-09-18'},
-    {t:'주민등록등본 발급 (필요 시)', due:'2026-10-02'},
-    {t:'서류 스캔본 통합 폴더 정리', due:'2026-10-05'}
+  common: [
+    { t:'증명사진 파일 준비 (규격 확인)', due:'2026-09-15' },
+    { t:'박사 학위증명서', due:'2026-09-18' },
+    { t:'대학원·학부 성적증명서', due:'2026-09-18' },
+    { t:'추천서 양식 2종 차이 확인', due:'2026-09-20' },
+    { t:'재직증명서 (양교 각 1부)', due:'2026-09-25' },
+    { t:'경력증명서 (전 직장 포함)', due:'2026-09-25' },
+    { t:'회사 위탁교육 추천 공문 · 동의서', due:'2026-09-30', d:'인사팀 결재 리드타임을 감안해 2주 전 요청한다.' },
+    { t:'주민등록초본 또는 신분 증빙 서류', due:'2026-09-30' },
+    { t:'전형료 납부 영수증 보관', due:'2026-10-06' },
+    { t:'제출본 전체 스캔 백업', due:'2026-10-07', d:'면접 때 같은 내용을 다시 봐야 한다.' }
   ],
-  essay:[
-    {t:'모든 성과에 숫자가 들어갔는가', due:'2026-09-20'},
-    {t:'박사 × 실무 결합의 차별점이 드러났는가', due:'2026-09-20'},
-    {t:'"박사가 있는데 왜 MBA인가"에 답했는가', due:'2026-09-20'},
-    {t:'학교별로 지원 이유가 다르게 쓰였는가', due:'2026-09-23'},
-    {t:'MBA가 "지금" 필요한 이유가 명확한가', due:'2026-09-23'},
-    {t:'졸업 후 계획이 커리큘럼과 연결되는가', due:'2026-09-23'},
-    {t:'추상어("열정","최선")를 제거했는가', due:'2026-09-26'},
-    {t:'제3자 검토를 1회 이상 받았는가', due:'2026-09-30'},
-    {t:'분량·양식 규정을 준수했는가', due:'2026-10-04'},
-    {t:'오탈자·회사명·연도 오기를 확인했는가', due:'2026-10-06'}
+  essay: [
+    { t:'첫 문장에서 “나는 누구인가”가 3초 안에 전달되는가' },
+    { t:'박사 학위와 실무 8년의 결합이 구체적 사례로 증명되는가' },
+    { t:'Why now — 지금이어야 하는 이유가 회사 상황과 연결되는가' },
+    { t:'정량 지표(숫자)가 최소 3개 이상 들어 있는가' },
+    { t:'학교 선택 이유가 그 학교에서만 가능한 것을 말하는가' },
+    { t:'졸업 후 계획이 현 직무의 연장선에서 구체적인가' },
+    { t:'회사 위탁 트랙임이 자연스럽게 드러나는가' },
+    { t:'추상 형용사(열정·최선·다양한)를 구체 명사로 교체했는가' },
+    { t:'문장 평균 길이가 60자 이하인가' },
+    { t:'블록별 분량 제한을 지켰는가' }
   ],
-  itv:[
-    {t:'자기소개서 내용 완전 숙지 (질문은 여기서 나옴)', due:'2026-10-26'},
-    {t:'자기소개 60초 / 90초 두 버전 암기', due:'2026-10-28'},
-    {t:'최근 산업 동향 3가지 정리', due:'2026-10-28'},
-    {t:'학교 커리큘럼에서 수강 희망 과목 3개 선정', due:'2026-10-30'},
-    {t:'예상 압박질문(박사 vs MBA · 경력 연차) 답변 리허설', due:'2026-10-31'},
-    {t:'면접관에게 할 질문 2개 준비', due:'2026-11-01'},
-    {t:'복장 준비 (정장)', due:'2026-11-02'},
-    {t:'교통편·소요시간 사전 확인', due:'2026-11-03'}
+  itv: [
+    { t:'11/4(수) 연차 신청', due:'2026-10-16', d:'면접일은 평일이다. 승인 리드타임을 확보한다.' },
+    { t:'최근 산업 이슈 3건 정리', due:'2026-11-01' },
+    { t:'복장 점검 (정장·구두·셔츠)', due:'2026-11-01' },
+    { t:'답변 스크립트 18문항 최종 리허설', due:'2026-11-02' },
+    { t:'지원서·자기소개서 제출본 인쇄', due:'2026-11-02' },
+    { t:'예상 역질문 2개 준비', due:'2026-11-02' },
+    { t:'면접장 위치·이동 경로·소요시간 확인', due:'2026-11-03' },
+    { t:'회사 위탁 승인 관련 문서 사본 지참', due:'2026-11-03' }
   ]
 };
-var SRC={top5:'최우선',snu:'서울대',kaist:'KAIST',common:'공통 서류',essay:'자기소개서',itv:'면접'};
 
-/* ---------- 로컬 저장 (localStorage) ---------- */
-var DBKEY='emba2027_v1';
-var DB={chk:{},rec:null,f:{},ev:[],task:[]};
-try{var _raw=localStorage.getItem(DBKEY); if(_raw){var _p=JSON.parse(_raw); if(_p&&typeof _p==='object'){DB.chk=_p.chk||{};DB.rec=_p.rec||null;DB.f=_p.f||{};DB.ev=_p.ev||[];DB.task=_p.task||[];}}}catch(e){}
-var _tt=null;
-function toast(m){var el=document.getElementById('toast'); if(!el)return; el.textContent=m||'저장됨'; el.classList.add('on');
-  clearTimeout(_tt); _tt=setTimeout(function(){el.classList.remove('on');},1100);}
-function save(){try{localStorage.setItem(DBKEY,JSON.stringify(DB));toast();}catch(e){toast('저장 실패 (브라우저 설정 확인)');}}
-function resetAll(){ if(!confirm('체크·에세이·답변 기록을 모두 지웁니다. 계속할까요?')) return;
-  try{localStorage.removeItem(DBKEY);}catch(e){} location.reload(); }
-function restore(){
-  Object.keys(DB.f).forEach(function(id){var el=document.getElementById(id); if(el&&el.value!==DB.f[id]) el.value=DB.f[id];});
-}
-document.addEventListener('input',function(e){
-  var t=e.target, id=t.id;
-  if(id && /^(e_|c_|q\d)/.test(id)){ DB.f[id]=t.value; save(); }
-});
+var SRC = { top5:'최우선', snu:'서울대', kaist:'KAIST', common:'공통 서류', essay:'자기소개서', itv:'면접' };
+var KEYS = ['top5','snu','kaist','common','essay','itv'];
 
-var ST = DB.chk;
+var EVENTS = [
+  { d:'2026-08-19', t:'KAIST Executive MBA 입학설명회 (1차)', s:'kaist' },
+  { d:'2026-08-22', t:'KAIST Executive MBA 입학설명회 (2차)', s:'kaist' },
+  { d:'2026-09-07', t:'서울대 EMBA 원서 접수 시작', s:'snu' },
+  { d:'2026-09-29', t:'KAIST 원서 접수 시작', s:'kaist' },
+  { d:'2026-10-08', t:'서울대 마감 18:00 / KAIST 마감 17:30 (동일일)', s:'snu' },
+  { d:'2026-10-14', t:'TEPS 특별시험', s:'snu' },
+  { d:'2026-10-30', t:'1단계(서류) 합격 발표', s:'snu' },
+  { d:'2026-11-04', t:'면접 (수) — 연차 필요', s:'snu' },
+  { d:'2026-11-23', t:'최종 합격 발표', s:'snu' },
+  { d:'2026-11-25', t:'등록 기간 시작 (~12/9)', s:'snu' },
+  { d:'2026-12-14', t:'1차 충원 합격', s:'snu' },
+  { d:'2026-12-21', t:'2차 충원 합격', s:'snu' },
+  { d:'2026-12-28', t:'3차 충원 합격', s:'snu' }
+];
+
+var DDAY = [
+  { d:'2026-08-19', t:'KAIST 입학설명회', s:'kaist' },
+  { d:'2026-09-07', t:'서울대 원서 접수 시작', s:'snu' },
+  { d:'2026-10-08', t:'양교 원서 동시 마감', s:'snu' },
+  { d:'2026-10-30', t:'1단계 합격 발표', s:'snu' },
+  { d:'2026-11-04', t:'면접 (연차 필요)', s:'snu' },
+  { d:'2026-11-23', t:'최종 합격 발표', s:'snu' }
+];
+
+var EBLOCKS = [
+  { id:'e_pos', n:'포지셔닝',
+    ph:'한 문장으로 “나는 무엇을 하는 사람인가”. 직급이 아니라 해결하는 문제로 정의한다. 예: “제조 공정의 데이터로 품질 비용을 줄이는 일을 8년째 하고 있다.”' },
+  { id:'e_why', n:'Why MBA · Why Now',
+    ph:'왜 MBA인가 + 왜 지금인가. 회사 위탁 협약 시점과 본인 커리어의 변곡점을 연결한다. “기술 판단은 하지만 자본 배분 판단은 못 한다” 같은 구체적 결핍에서 출발한다.' },
+  { id:'e_car', n:'경력 하이라이트',
+    ph:'8년 중 가장 큰 성과 2~3개. 상황 → 본인 행동 → 결과(숫자) 순서. 규모·기간·비율 중 하나는 반드시 숫자로 적는다.' },
+  { id:'e_gap', n:'박사 × 실무 8년 차별화',
+    ph:'다른 지원자와 나를 구분하는 지점. 학위 자체가 아니라, 박사 훈련이 실무 의사결정을 어떻게 바꿨는지 사례로 쓴다. 경력 8년이 짧다는 반론에 대한 답도 여기서 미리 준비한다.' },
+  { id:'e_plan', n:'졸업 후 계획',
+    ph:'2년 후 · 5년 후. 현 직무의 연장선에서 구체적으로. 회사 안에서 맡고 싶은 역할과, 그 역할에 지금 부족한 역량을 연결한다.' },
+  { id:'e_fit', n:'학교 선택 이유',
+    ph:'그 학교에서만 가능한 것 하나. 커리큘럼 과목명, 동문 구성, 특정 센터·프로그램 등 검증 가능한 근거를 든다. 두 학교에 같은 문장을 쓰지 않는다.' }
+];
+
+var QCATS = [
+  { n:'기본', from:0, to:3 },
+  { n:'압박', from:4, to:7 },
+  { n:'경력', from:8, to:11 },
+  { n:'전략', from:12, to:14 },
+  { n:'계획', from:15, to:17 }
+];
+
+var QS = [
+  { q:'자기소개를 1분 안에 해주세요.', h:'현재 직무 → 박사 배경 → EMBA 목표 순서. 숫자 하나를 반드시 포함한다.' },
+  { q:'왜 지금 EMBA를 하려고 합니까?', h:'회사 위탁 협약 시점과 본인 커리어의 변곡점을 연결한다.' },
+  { q:'우리 학교를 선택한 이유는 무엇입니까?', h:'이 학교에서만 가능한 것 하나를 구체적으로. 일반론은 감점이다.' },
+  { q:'본인의 가장 큰 강점과 약점을 말해주세요.', h:'약점은 “지금 개선 중인 행동”으로 마무리한다.' },
+  { q:'박사 학위가 있는데 MBA가 또 필요합니까?', h:'기술 깊이와 경영 언어의 간극. 실제로 막혔던 의사결정 사례를 든다.' },
+  { q:'회사가 학비를 지원하는데, 졸업 후 이직할 생각은 없습니까?', h:'의무 재직 조건을 정확히 인지하고 있음을 밝히고, 회사 내 목표 직무를 말한다.' },
+  { q:'주 2회 야간 수업과 현업을 병행할 수 있습니까?', h:'각오가 아니라 시간표로 답한다. 업무 인수·가족 합의까지 구체적으로.' },
+  { q:'경력 8년은 다른 지원자보다 짧습니다.', h:'기간이 아니라 의사결정 범위와 책임 규모로 반박한다.' },
+  { q:'지금까지 가장 큰 성과 한 가지를 말해주세요.', h:'상황-행동-결과. 결과는 숫자로. 90초 안에 끝낸다.' },
+  { q:'실패했던 프로젝트와 그때 배운 것은 무엇입니까?', h:'본인 책임 범위를 회피하지 않는다. 이후 바뀐 행동을 말한다.' },
+  { q:'리더로서 갈등을 조정한 경험이 있습니까?', h:'이해관계자 두 축을 명시하고, 무엇을 포기시켰는지 말한다.' },
+  { q:'현재 조직에서 본인의 역할을 한 문장으로 정의하면?', h:'직급이 아니라 “어떤 문제를 맡는 사람”으로 답한다.' },
+  { q:'우리 산업의 향후 3년 최대 리스크는 무엇입니까?', h:'준비한 최근 이슈 3건 중 하나를 근거로. 판단까지 붙인다.' },
+  { q:'본인 회사의 성장 전략을 하나 제안한다면?', h:'내부자만 가능한 구체성. 단, 기밀은 피하고 공개 정보 수준으로.' },
+  { q:'기술 인력이 경영을 배우면 조직에 무엇이 달라집니까?', h:'본인 경험에서 나온 전환 사례 하나로 증명한다.' },
+  { q:'졸업 후 5년 계획은 무엇입니까?', h:'조직 내 목표 포지션 → 그 다음. 회사를 떠나는 그림은 그리지 않는다.' },
+  { q:'EMBA에서 무엇을 얻고, 무엇을 주겠습니까?', h:'기여할 것을 먼저 말한다. 제조·기술·연구 관점의 사례 제공 등.' },
+  { q:'마지막으로 하고 싶은 말이 있습니까?', h:'준비한 한 문장. 지원 동기를 다시 못 박고 끝낸다.' }
+];
+
+var CMP_EXP = [
+  { n:'10년 미만', v:15 }, { n:'10~15년', v:38 }, { n:'15~20년', v:27 }, { n:'20년 이상', v:20 }
+];
+var CMP_IND = [
+  { n:'제조', v:28 }, { n:'금융', v:18 }, { n:'IT·통신', v:17 },
+  { n:'서비스', v:14 }, { n:'공공·기타', v:23 }
+];
+
+/* ══ ② 상태 · 저장 ══════════════════════════════════════ */
+
+var LSKEY = 'emba2027_v1';
+var DB = { chk:{}, ev:[], task:[], rec:[], f:{} };
 var ONLY = false;
 
-function fit(key){                     /* 항목 수가 바뀌어도 기존 체크를 보존 */
+function load(){
+  try{
+    var raw = localStorage.getItem(LSKEY);
+    if(raw){
+      var o = JSON.parse(raw);
+      if(o && typeof o === 'object'){
+        DB.chk  = o.chk  || {};
+        DB.ev   = o.ev   || [];
+        DB.task = o.task || [];
+        DB.rec  = o.rec  || [];
+        DB.f    = o.f    || {};
+      }
+    }
+  }catch(e){ toast('저장 데이터를 읽지 못했다'); }
+  KEYS.forEach(fit);
+  if(!DB.rec.length){
+    DB.rec = [
+      { r:'직장 상사', n:'', d:'', s:'미요청' },
+      { r:'학위 지도교수', n:'', d:'', s:'미요청' }
+    ];
+  }
+}
+
+/* 항목 수가 바뀌어도 기존 체크를 보존한다 (비파괴) */
+function fit(key){
   var n = LISTS[key].length;
-  if(!Array.isArray(ST[key])) ST[key]=[];
-  while(ST[key].length < n) ST[key].push(false);
-  if(ST[key].length > n) ST[key].length = n;
+  var a = DB.chk[key];
+  if(!Array.isArray(a)) a = [];
+  while(a.length < n) a.push(false);
+  if(a.length > n) a = a.slice(0, n);
+  DB.chk[key] = a;
 }
-function render(key, mount, barId, pctId){
-  var arr = LISTS[key]; fit(key);
-  var el = document.getElementById(mount); if(!el) return;
-  var h='', shown=0;
-  arr.forEach(function(o,i){
-    var on = !!ST[key][i];
-    if(ONLY && on) return;
+
+function save(){
+  try{ localStorage.setItem(LSKEY, JSON.stringify(DB)); }
+  catch(e){ toast('저장 실패 (브라우저 설정 확인)'); }
+}
+
+var toastT;
+function toast(msg){
+  var el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('on');
+  clearTimeout(toastT);
+  toastT = setTimeout(function(){ el.classList.remove('on'); }, 2600);
+}
+
+/* ══ ③ 날짜 · 긴급도 ════════════════════════════════════ */
+
+function today0(){ var d = new Date(); d.setHours(0,0,0,0); return d; }
+
+function diff(ds){
+  if(!ds) return null;
+  var p = ds.split('-');
+  var d = new Date(+p[0], +p[1]-1, +p[2]); d.setHours(0,0,0,0);
+  return Math.round((d - today0()) / 86400000);
+}
+
+/* 긴급도 등급: 0=지남 1=≤3 2=≤10 3=≤30 4=그외 5=날짜없음 */
+function tier(n){
+  if(n === null || n === undefined) return 5;
+  if(n < 0)  return 0;
+  if(n <= 3) return 1;
+  if(n <= 10) return 2;
+  if(n <= 30) return 3;
+  return 4;
+}
+
+function ddText(n){
+  if(n === null) return '기한 없음';
+  if(n < 0) return Math.abs(n) + '일 지남';
+  if(n === 0) return '오늘 마감';
+  if(n === 1) return '내일 마감';
+  return 'D-' + n;
+}
+
+function dueTag(ds){
+  var n = diff(ds), t = tier(n);
+  var pre = (t === 0) ? '&#9888; ' : '';
+  return '<span class="dd u' + t + '">' + pre + ddText(n) + '</span>';
+}
+
+function md(ds){ var p = ds.split('-'); return (+p[1]) + '/' + (+p[2]); }
+function ymLabel(ds){ var p = ds.split('-'); return p[0] + '년 ' + (+p[1]) + '월'; }
+function esc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function won(n){ return Math.round(n).toLocaleString('ko-KR'); }
+function man(n){
+  var m = Math.round(n / 10000);
+  if(m >= 10000) return (m/10000).toFixed(m % 10000 === 0 ? 0 : 1) + '억';
+  return m.toLocaleString('ko-KR') + '만';
+}
+
+/* ══ ④ 리스트 렌더 ══════════════════════════════════════ */
+
+function itemHTML(o, key, i, checked){
+  var t = tier(o.due ? diff(o.due) : null);
+  var cls = 'it u' + t + (checked ? ' dn' : '');
+  var h = '<label class="' + cls + '" data-row="' + key + '-' + i + '">';
+  h += '<input type="checkbox" class="cb" data-k="' + key + '" data-i="' + i + '"' + (checked ? ' checked' : '') + '>';
+  h += '<span class="bd"><span class="tt">' + esc(o.t) + '</span>';
+  var meta = [];
+  if(o.due) meta.push(dueTag(o.due));
+  if(o.due) meta.push('<span class="mini num">' + md(o.due) + '</span>');
+  if(meta.length) h += '<span class="meta">' + meta.join('') + '</span>';
+  if(o.d) h += '<span class="ds">' + esc(o.d) + '</span>';
+  h += '</span></label>';
+  return h;
+}
+
+function render(key, mountId, barId, pctId){
+  var mount = document.getElementById(mountId);
+  if(!mount) return;
+  var arr = LISTS[key], ck = DB.chk[key], done = 0, out = '', shown = 0;
+  for(var i = 0; i < arr.length; i++){
+    if(ck[i]) done++;
+    if(ONLY && ck[i]) continue;
+    out += itemHTML(arr[i], key, i, !!ck[i]);
     shown++;
-    h+='<div class="chk'+(on?' done':'')+'">'+
-       '<input type="checkbox" id="'+key+i+'" '+(on?'checked':'')+' data-k="'+key+'" data-i="'+i+'">'+
-       '<label for="'+key+i+'">'+o.t+dueTag(o.due)+(o.d?'<div class="d">'+o.d+'</div>':'')+'</label></div>';
-  });
-  if(!shown) h='<div class="empty">'+(ONLY?'남은 항목이 없습니다 ✔':'항목 없음')+'</div>';
-  el.innerHTML=h;
-  var done = ST[key].filter(Boolean).length, pc = Math.round(done/arr.length*100);
-  if(barId){var b=document.getElementById(barId); if(b) b.style.width = pc+'%';}
-  if(pctId){var p=document.getElementById(pctId); if(p) p.textContent = done+' / '+arr.length+' 완료 ('+pc+'%)';}
+  }
+  if(!shown){
+    out = ONLY
+      ? '<div class="allclear"><div class="ic">&#10003;</div><div><b>이 영역은 모두 끝났다</b>'
+        + '<span>' + arr.length + '개 전부 완료. 미완료만 보기를 끄면 다시 보인다.</span></div></div>'
+      : '<div class="empty">항목이 없다</div>';
+  }
+  mount.innerHTML = out;
+  var pct = arr.length ? Math.round(done / arr.length * 100) : 0;
+  var bar = document.getElementById(barId); if(bar) bar.style.width = pct + '%';
+  var pel = document.getElementById(pctId);
+  if(pel) pel.textContent = (arr.length - done) === 0 ? '완료' : ('남은 ' + (arr.length - done));
 }
 
-/* ---------- 내 할 일 (직접 등록) ---------- */
-function myTasks(){ if(!Array.isArray(DB.task)) DB.task=[]; return DB.task; }
-function drawTasks(){
-  var el=document.getElementById('mytasks'); if(!el) return;
-  var a=myTasks().map(function(o,i){return {o:o,i:i};});
-  a.sort(function(x,y){
-    var dx=x.o.d||'9999-99-99', dy=y.o.d||'9999-99-99';
-    return dx<dy?-1:(dx>dy?1:x.i-y.i);
-  });
-  var h='';
-  a.forEach(function(r){
-    if(ONLY && r.o.done) return;
-    h+='<div class="myrow'+(r.o.done?' done':'')+'">'+
-       '<input type="checkbox" '+(r.o.done?'checked':'')+' data-task="'+r.i+'">'+
-       '<div class="bd2"><div class="tt">'+esc(r.o.t)+'</div>'+
-       '<div class="mt"><span class="src">내 등록</span>'+(r.o.d?dueTag(r.o.d):'')+'</div></div>'+
-       '<button class="del" title="삭제" onclick="delTask('+r.i+')">✕</button></div>';
-  });
-  if(!h) h='<div class="empty">등록된 항목이 없습니다. 아래에서 추가하세요.</div>';
-  el.innerHTML=h;
-}
-function addTask(){
-  var d=document.getElementById('mt_d').value, t=(document.getElementById('mt_t').value||'').trim();
-  if(!t){ toast('내용을 입력하세요'); return; }
-  myTasks().push({d:d||'',t:t,done:false});
-  document.getElementById('mt_t').value='';
-  save(); drawTasks(); drawFocus(); renderProg();
-  toast('할 일이 추가되었습니다');
-}
-function delTask(i){
-  if(!confirm('이 항목을 삭제할까요?')) return;
-  myTasks().splice(i,1); save(); drawTasks(); drawFocus(); renderProg();
+/* ══ ⑤ 홈 — 히어로 / 포커스 / D-Day / 타임라인 / 진척 ═══ */
+
+function allDdays(){
+  var list = DDAY.map(function(o){ return { d:o.d, t:o.t, s:o.s, mine:false }; })
+    .concat(DB.ev.map(function(o){ return { d:o.d, t:o.t, s:'me', mine:true }; }));
+  return list.filter(function(o){ return o.d && diff(o.d) >= -3; })
+    .sort(function(a,b){ return a.d < b.d ? -1 : 1; });
 }
 
-/* ---------- 오늘·이번 주 해야 할 일 ---------- */
+function drawHero(){
+  var up = DDAY.filter(function(o){ return diff(o.d) >= 0; })
+    .sort(function(a,b){ return a.d < b.d ? -1 : 1; });
+  var hero = document.getElementById('hero');
+  var t = document.getElementById('hero_t'), s = document.getElementById('hero_s');
+  var n = document.getElementById('hero_n'), l = document.getElementById('hero_l');
+  var nx = document.getElementById('hero_next');
+
+  if(!up.length){
+    hero.classList.add('done');
+    t.textContent = '지원 시즌 종료';
+    s.textContent = '2027학년도 봄학기 전형 일정이 모두 지났다. 기록은 그대로 보관된다.';
+    n.textContent = '종료';
+    l.textContent = 'SEASON';
+    nx.innerHTML = '<b>다음 시즌</b><span style="color:var(--tx3)">2028학년도 일정이 공개되면 데이터를 갱신한다</span>';
+    return;
+  }
+  hero.classList.remove('done');
+  var a = up[0], d = diff(a.d), tr = tier(d);
+  t.innerHTML = esc(a.t) + ' <span class="tag ' + a.s + '">' + (a.s === 'kaist' ? 'KAIST' : '서울대') + '</span>';
+  var ap = a.d.split('-');
+  var aw = ['일','월','화','수','목','금','토'][new Date(+ap[0], +ap[1]-1, +ap[2]).getDay()];
+  s.textContent = ap[0] + '. ' + (+ap[1]) + '. ' + (+ap[2]) + '. (' + aw + ')';
+  n.textContent = d === 0 ? '오늘' : ('D-' + d);
+  n.style.color = tr <= 1 ? 'var(--bad)' : (tr === 2 ? 'var(--warn)' : 'var(--tx)');
+  l.textContent = d === 0 ? 'TODAY' : '남은 일수';
+
+  var b = up[1];
+  nx.innerHTML = b
+    ? '<span class="eyebrow">그 다음</span><b>' + esc(b.t) + '</b>'
+      + '<span class="num" style="color:var(--tx3)">' + md(b.d) + '</span>'
+      + '<span class="n2 num">D-' + diff(b.d) + '</span>'
+    : '<span class="eyebrow">그 다음</span><b>이후 일정 없음</b>';
+}
+
 function drawFocus(){
-  var el=document.getElementById('focus'); if(!el) return;
-  var rows=[];
-  Object.keys(LISTS).forEach(function(k){
-    fit(k);
-    LISTS[k].forEach(function(o,i){
-      if(ST[k][i] || !o.due) return;
-      var n=diff(o.due);
-      if(n>14) return;
-      rows.push({n:n,due:o.due,t:o.t,src:SRC[k]||k,k:k,i:i});
+  var rows = [];
+  KEYS.forEach(function(k){
+    LISTS[k].forEach(function(o, i){
+      if(DB.chk[k][i]) return;
+      if(!o.due) return;
+      var n = diff(o.due);
+      if(n > 14) return;
+      rows.push({ t:o.t, due:o.due, n:n, src:SRC[k], k:k, i:i, kind:'ck' });
     });
   });
-  myTasks().forEach(function(o,i){
+  DB.task.forEach(function(o, i){
     if(o.done) return;
-    var n=o.d?diff(o.d):9999;
-    if(n>14) return;
-    rows.push({n:n,due:o.d,t:o.t,src:'내 등록',task:i});
+    var n = o.d ? diff(o.d) : null;
+    if(n !== null && n > 14) return;
+    rows.push({ t:o.t, due:o.d || '', n:n, src:'내 할 일', ti:i, kind:'task' });
   });
-  rows.sort(function(a,b){return a.n-b.n;});
-  var h='';
-  rows.slice(0,12).forEach(function(r){
-    h+='<div class="fi">'+
-       '<input type="checkbox" '+(r.task!==undefined?'data-task="'+r.task+'"':'data-k="'+r.k+'" data-i="'+r.i+'"')+'>'+
-       '<div class="bd2"><div class="tt">'+esc(r.t)+'</div>'+
-       '<div class="mt"><span class="src">'+r.src+'</span>'+dueTag(r.due)+'</div></div></div>';
+  rows.sort(function(a, b){
+    if(a.n === null) return 1;
+    if(b.n === null) return -1;
+    return a.n - b.n;
   });
-  if(!h) h='<div class="empty">2주 이내 마감 항목이 모두 정리되었습니다 ✔</div>';
-  el.innerHTML=h;
+  var over = rows.length - 12;
+  rows = rows.slice(0, 12);
+
+  var mount = document.getElementById('focus');
+  var cnt = document.getElementById('focus_cnt');
+  if(!rows.length){
+    mount.innerHTML = '<div class="allclear"><div class="ic">&#10003;</div><div>'
+      + '<b>2주 안에 마감인 일은 전부 끝났다</b>'
+      + '<span>다음 마감이 다가오면 여기 다시 나타난다.</span></div></div>';
+    cnt.textContent = '';
+    return;
+  }
+  cnt.textContent = '남은 ' + rows.length + (over > 0 ? ' +' + over : '');
+  var out = '';
+  rows.forEach(function(r){
+    var t = tier(r.n);
+    out += '<label class="it u' + t + '">';
+    out += r.kind === 'ck'
+      ? '<input type="checkbox" class="cb" data-k="' + r.k + '" data-i="' + r.i + '">'
+      : '<input type="checkbox" class="cb" data-task="' + r.ti + '">';
+    out += '<span class="bd"><span class="tt">' + esc(r.t) + '</span><span class="meta">';
+    out += dueTag(r.due);
+    if(r.due) out += '<span class="mini num">' + md(r.due) + '</span>';
+    out += '<span class="tag src">' + r.src + '</span>';
+    out += '</span></span></label>';
+  });
+  if(over > 0) out += '<p class="mini" style="margin-top:9px">' + over + '건 더 있다. 체크리스트 탭에서 전체를 본다.</p>';
+  mount.innerHTML = out;
 }
+
+function drawDday(){
+  var list = allDdays().slice(0, 6);
+  var mount = document.getElementById('ddays');
+  if(!list.length){ mount.innerHTML = '<div class="empty">다가오는 일정이 없다</div>'; return; }
+  var out = '';
+  list.forEach(function(o){
+    var n = diff(o.d), t = tier(n);
+    out += '<div class="it u' + t + '" style="align-items:center">';
+    out += '<span class="bd"><span class="tt">' + esc(o.t) + '</span><span class="meta">';
+    out += dueTag(o.d) + '<span class="mini num">' + md(o.d) + '</span>';
+    out += '<span class="tag ' + o.s + '">' + (o.s === 'me' ? '내 일정' : (o.s === 'kaist' ? 'KAIST' : '서울대')) + '</span>';
+    out += '</span></span></div>';
+  });
+  mount.innerHTML = out;
+}
+
+function drawTL(){
+  var list = EVENTS.map(function(o){ return { d:o.d, t:o.t, s:o.s, mine:false }; })
+    .concat(DB.ev.map(function(o, i){ return { d:o.d, t:o.t, s:'me', mine:true, i:i }; }))
+    .filter(function(o){ return !!o.d; })
+    .sort(function(a, b){ return a.d < b.d ? -1 : 1; });
+
+  document.getElementById('tl_cnt').textContent = list.length + '건'
+    + (DB.ev.length ? ' (내 일정 ' + DB.ev.length + ')' : '');
+
+  var out = '', ym = '';
+  list.forEach(function(o){
+    var y = o.d.slice(0, 7);
+    if(y !== ym){ ym = y; out += '<div class="tlm">' + ymLabel(o.d) + '</div>'; }
+    var n = diff(o.d);
+    var cls = 'tli' + (n < 0 ? ' past' : '') + (n === 0 ? ' tdy' : '');
+    out += '<div class="' + cls + '"><div class="dt num">' + md(o.d) + '</div>';
+    out += '<div class="tx">' + esc(o.t) + ' <span class="tag ' + o.s + '">'
+        + (o.s === 'me' ? '내 일정' : (o.s === 'kaist' ? 'KAIST' : '서울대')) + '</span></div>';
+    if(n === 0) out += '<div class="dd u1" style="flex:0 0 auto">오늘</div>';
+    else if(n > 0) out += '<div class="dd u' + tier(n) + '" style="flex:0 0 auto">D-' + n + '</div>';
+    if(o.mine) out += '<button class="x" type="button" data-delev="' + o.i + '" aria-label="일정 삭제">&times;</button>';
+    out += '</div>';
+  });
+  document.getElementById('tl').innerHTML = out || '<div class="empty">일정이 없다</div>';
+}
+
+function drawSW(){
+  var mount = document.getElementById('swwrap');
+  if(!DB.ev.length){
+    mount.innerHTML = '<div class="empty" style="padding:14px"><b>등록한 일정이 없다</b>'
+      + '회의 중 확정된 날짜를 여기에 바로 넣는다.</div>';
+    return;
+  }
+  var out = '<div class="eyebrow" style="margin-bottom:7px">등록한 내 일정 ' + DB.ev.length + '건</div>';
+  DB.ev.slice().sort(function(a, b){ return a.d < b.d ? -1 : 1; }).forEach(function(o){
+    var i = DB.ev.indexOf(o), n = diff(o.d);
+    out += '<div class="it u' + tier(n) + '" style="align-items:center">';
+    out += '<span class="bd"><span class="tt">' + esc(o.t) + '</span><span class="meta">'
+        + dueTag(o.d) + '<span class="mini num">' + md(o.d) + '</span></span></span>';
+    out += '<button class="x" type="button" data-delev="' + i + '" aria-label="삭제">&times;</button></div>';
+  });
+  mount.innerHTML = out;
+}
+
+function drawTasks(){
+  var mount = document.getElementById('mytasks');
+  var cnt = document.getElementById('mt_cnt');
+  var open = DB.task.filter(function(o){ return !o.done; }).length;
+  cnt.textContent = DB.task.length ? ('남은 ' + open + ' / ' + DB.task.length) : '';
+  if(!DB.task.length){
+    mount.innerHTML = '<div class="empty"><b>등록한 할 일이 없다</b>'
+      + '생각난 것을 개요 탭 빠른 등록에 적어두면 여기와 “지금 해야 할 일”에 함께 나타난다.</div>';
+    return;
+  }
+  var list = DB.task.map(function(o, i){ return { o:o, i:i }; });
+  list.sort(function(a, b){
+    if(a.o.done !== b.o.done) return a.o.done ? 1 : -1;
+    if(!a.o.d) return 1;
+    if(!b.o.d) return -1;
+    return a.o.d < b.o.d ? -1 : 1;
+  });
+  var out = '';
+  list.forEach(function(x){
+    if(ONLY && x.o.done) return;
+    var n = x.o.d ? diff(x.o.d) : null;
+    out += '<label class="it u' + tier(n) + (x.o.done ? ' dn' : '') + '">';
+    out += '<input type="checkbox" class="cb" data-task="' + x.i + '"' + (x.o.done ? ' checked' : '') + '>';
+    out += '<span class="bd"><span class="tt">' + esc(x.o.t) + '</span><span class="meta">';
+    out += dueTag(x.o.d || '');
+    if(x.o.d) out += '<span class="mini num">' + md(x.o.d) + '</span>';
+    out += '<span class="tag me">내 할 일</span></span></span>';
+    out += '<button class="x" type="button" data-deltask="' + x.i + '" aria-label="삭제">&times;</button></label>';
+  });
+  mount.innerHTML = out || '<div class="allclear"><div class="ic">&#10003;</div><div>'
+    + '<b>등록한 할 일을 모두 끝냈다</b><span>미완료만 보기를 끄면 완료 항목이 보인다.</span></div></div>';
+}
+
+function renderProg(){
+  var totalN = 0, totalD = 0, out = '';
+  KEYS.forEach(function(k){
+    var arr = LISTS[k], ck = DB.chk[k];
+    var d = ck.filter(Boolean).length;
+    totalN += arr.length; totalD += d;
+    var pct = arr.length ? Math.round(d / arr.length * 100) : 0;
+    var left = arr.length - d;
+    out += '<div class="brow"><div>' + SRC[k] + '</div>';
+    out += '<div class="bt"><i style="width:' + pct + '%;background:'
+        + (left === 0 ? 'var(--ok)' : (pct > 40 ? 'var(--acc)' : 'var(--line2)')) + '"></i></div>';
+    out += '<div class="bv">' + (left === 0 ? '완료' : ('−' + left)) + '</div></div>';
+  });
+  var tOpen = DB.task.filter(function(o){ return !o.done; }).length;
+  if(DB.task.length){
+    var tp = Math.round((DB.task.length - tOpen) / DB.task.length * 100);
+    out += '<div class="brow"><div>내 할 일</div><div class="bt"><i style="width:' + tp
+        + '%;background:' + (tOpen === 0 ? 'var(--ok)' : 'var(--acc)') + '"></i></div>'
+        + '<div class="bv">' + (tOpen === 0 ? '완료' : ('−' + tOpen)) + '</div></div>';
+    totalN += DB.task.length; totalD += (DB.task.length - tOpen);
+  }
+  document.getElementById('prog').innerHTML = '<div class="bars">' + out + '</div>';
+
+  var pct = totalN ? Math.round(totalD / totalN * 100) : 0;
+  document.getElementById('allbar').style.width = pct + '%';
+  document.getElementById('allpct').textContent = pct + '%';
+  var sum = document.getElementById('chk_sum');
+  if(sum) sum.textContent = '전체 ' + totalD + ' / ' + totalN + ' 완료 · 남은 ' + (totalN - totalD) + '개';
+}
+
+/* ══ ⑥ 추천인 ═══════════════════════════════════════════ */
+
+var REC_ST = ['미요청', '요청함', '수령완료'];
+function drawRec(){
+  var out = '';
+  DB.rec.forEach(function(r, i){
+    var si = REC_ST.indexOf(r.s); if(si < 0) si = 0;
+    out += '<tr>';
+    out += '<td><input type="text" data-rec="' + i + '" data-fd="r" value="' + esc(r.r) + '" placeholder="구분" aria-label="구분"></td>';
+    out += '<td><input type="text" data-rec="' + i + '" data-fd="n" value="' + esc(r.n) + '" placeholder="성함" aria-label="성함"></td>';
+    out += '<td><input type="text" data-rec="' + i + '" data-fd="d" value="' + esc(r.d) + '" placeholder="MM/DD" inputmode="numeric" aria-label="요청일" style="max-width:92px"></td>';
+    out += '<td><select data-rec="' + i + '" data-fd="s" aria-label="상태">';
+    REC_ST.forEach(function(s, k){ out += '<option' + (k === si ? ' selected' : '') + '>' + s + '</option>'; });
+    out += '</select><div class="st s' + si + '" style="margin-top:4px">' + REC_ST[si] + '</div></td>';
+    out += '<td class="act"><button class="x" type="button" data-delrec="' + i + '" aria-label="행 삭제">&times;</button></td>';
+    out += '</tr>';
+  });
+  document.getElementById('recTb').innerHTML = out;
+}
+
+/* ══ ⑦ 자기소개서 ═══════════════════════════════════════ */
+
+function drawEssay(){
+  var out = '';
+  EBLOCKS.forEach(function(b, i){
+    out += '<div class="eblock"><div class="eh"><span class="no">0' + (i + 1) + '</span>'
+        + '<span class="en">' + b.n + '</span>'
+        + '<span class="cc num" id="cc_' + b.id + '">0자</span></div>';
+    out += '<textarea id="' + b.id + '" placeholder="' + esc(b.ph) + '"></textarea></div>';
+  });
+  document.getElementById('ewrap').innerHTML = out;
+  EBLOCKS.forEach(function(b){
+    var el = document.getElementById(b.id);
+    el.value = DB.f[b.id] || '';
+    cc(b.id);
+  });
+}
+function cc(id){
+  var el = document.getElementById('cc_' + id);
+  if(el) el.textContent = (document.getElementById(id).value || '').length + '자';
+}
+
+function exportEssay(){
+  var s = '[EMBA 2027 자기소개서 스토리라인]\n작성일: ' + new Date().toLocaleDateString('ko-KR') + '\n';
+  EBLOCKS.forEach(function(b, i){
+    var v = (document.getElementById(b.id).value || '').trim();
+    s += '\n\n■ ' + (i + 1) + '. ' + b.n + '\n' + (v || '(미작성)');
+  });
+  var box = document.getElementById('eout');
+  box.hidden = false;
+  var ta = document.getElementById('eouttx');
+  ta.value = s; ta.focus(); ta.select();
+  toast('내보내기 완료 — Ctrl/⌘+C 로 복사');
+}
+
+/* ══ ⑧ 면접 ═════════════════════════════════════════════ */
+
+var PRAC = false, CUR = 0, TSEC = 0, TIV = null;
+
+function drawItv(){
+  var out = '';
+  QCATS.forEach(function(c){
+    out += '<div class="qcat">' + c.n + ' · ' + (c.to - c.from + 1) + '문항</div>';
+    for(var i = c.from; i <= c.to; i++){
+      out += '<div class="qc" data-qi="' + i + '"><div class="qn">'
+          + '<span class="qi">Q' + (i + 1) + '</span>'
+          + '<div><div class="qt">' + esc(QS[i].q) + '</div>'
+          + '<div class="qhint">' + esc(QS[i].h) + '</div></div></div>';
+      out += '<textarea id="q' + i + '" placeholder="답변 스크립트를 적는다. 소리 내 읽어 60~90초에 맞춘다."></textarea>';
+      out += '<div class="qfoot"><span class="mini num" id="qc_' + i + '">0자</span></div></div>';
+    }
+  });
+  document.getElementById('qbank').innerHTML = out;
+  for(var i = 0; i < QS.length; i++){
+    var el = document.getElementById('q' + i);
+    el.value = DB.f['q' + i] || '';
+    qcc(i);
+  }
+}
+function qcc(i){
+  var el = document.getElementById('qc_' + i);
+  if(el){
+    var len = (document.getElementById('q' + i).value || '').length;
+    el.textContent = len + '자' + (len ? ' · 약 ' + Math.round(len / 5.5) + '초' : '');
+  }
+}
+
+function setPrac(on){
+  PRAC = on;
+  document.body.classList.toggle('practice', on);
+  document.getElementById('pracbar').hidden = !on;
+  document.getElementById('m_list').setAttribute('aria-pressed', String(!on));
+  document.getElementById('m_prac').setAttribute('aria-pressed', String(on));
+  if(on) goQ(CUR); else stopT();
+}
+function goQ(i){
+  CUR = Math.max(0, Math.min(QS.length - 1, i));
+  var cards = document.querySelectorAll('#qbank .qc');
+  for(var k = 0; k < cards.length; k++) cards[k].classList.toggle('cur', k === CUR);
+  document.getElementById('p_pos').textContent = (CUR + 1) + ' / ' + QS.length
+    + ' · ' + catOf(CUR);
+  var dots = '';
+  for(var j = 0; j < QS.length; j++){
+    var filled = (DB.f['q' + j] || '').length > 30;
+    dots += '<i class="' + (j === CUR ? 'c' : (filled ? 'f' : '')) + '"></i>';
+  }
+  document.getElementById('pdots').innerHTML = dots;
+  resetT();
+}
+function catOf(i){
+  for(var k = 0; k < QCATS.length; k++) if(i >= QCATS[k].from && i <= QCATS[k].to) return QCATS[k].n;
+  return '';
+}
+function fmtT(s){ return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
+function paintT(){
+  var el = document.getElementById('tmr');
+  el.textContent = fmtT(TSEC);
+  el.classList.toggle('over', TSEC > 90);
+}
+function startT(){
+  if(TIV){ stopT(); return; }
+  TIV = setInterval(function(){ TSEC++; paintT(); }, 1000);
+  document.getElementById('t_go').textContent = '일시정지';
+}
+function stopT(){
+  if(TIV) clearInterval(TIV);
+  TIV = null;
+  var b = document.getElementById('t_go'); if(b) b.textContent = '시작';
+}
+function resetT(){ stopT(); TSEC = 0; paintT(); }
+
+function exportItv(){
+  var s = '[EMBA 2027 면접 답변 스크립트]\n작성일: ' + new Date().toLocaleDateString('ko-KR') + '\n';
+  QCATS.forEach(function(c){
+    s += '\n\n=== ' + c.n + ' ===';
+    for(var i = c.from; i <= c.to; i++){
+      var v = (document.getElementById('q' + i).value || '').trim();
+      s += '\n\nQ' + (i + 1) + '. ' + QS[i].q + '\nA. ' + (v || '(미작성)');
+    }
+  });
+  var box = document.getElementById('iout');
+  box.hidden = false;
+  var ta = document.getElementById('iouttx');
+  ta.value = s; ta.focus(); ta.select();
+  toast('내보내기 완료 — Ctrl/⌘+C 로 복사');
+}
+
+/* ══ ⑨ 비용 ═════════════════════════════════════════════ */
+
+var CIDS = ['c_snu','c_kai','c_pmba','c_sup','c_ent','c_fee','c_trip','c_book','c_life','c_mon','c_bond'];
+function cv(id){ var el = document.getElementById(id); return el ? (parseFloat(el.value) || 0) : 0; }
+
+function calc(){
+  var sup = Math.max(0, Math.min(100, cv('c_sup'))) / 100;
+  var extra = cv('c_ent') + cv('c_fee') + cv('c_trip') + cv('c_book') + cv('c_life');
+  var mon = Math.max(1, cv('c_mon'));
+  var bond = cv('c_bond');
+
+  var progs = [
+    { n:'서울대 EMBA',   tag:'snu',   tuition:cv('c_snu'),  rank:1 },
+    { n:'KAIST EMBA',    tag:'kaist', tuition:cv('c_kai'),  rank:2 },
+    { n:'KAIST PMBA',    tag:'kaist', tuition:cv('c_pmba'), rank:3 }
+  ].map(function(p){
+    p.company = p.tuition * sup;
+    p.mine = (p.tuition - p.company) + extra;
+    p.monthly = p.mine / mon;
+    p.bondRisk = p.company;
+    return p;
+  });
+
+  var min = Math.min.apply(null, progs.map(function(p){ return p.mine; }));
+  var max = Math.max.apply(null, progs.map(function(p){ return p.mine; })) || 1;
+
+  document.getElementById('costOut').innerHTML = progs.map(function(p){
+    var best = p.mine === min;
+    var h = '<div class="ccard' + (best ? ' best' : '') + '">';
+    h += '<div class="cn">' + p.n + '<span class="tag ' + p.tag + '">'
+      + (p.tag === 'snu' ? '1순위' : (p.rank === 2 ? '2순위' : '대안')) + '</span>'
+      + (best ? '<span class="conf-b" style="margin-left:auto">최저</span>' : '') + '</div>';
+    h += '<div class="cl" style="margin-top:11px">본인 실부담 총액</div>';
+    h += '<div class="big">' + man(p.mine) + '<em>원</em></div>';
+    h += '<hr class="sep" style="margin:11px 0">';
+    h += '<div class="krow"><span>등록금 <span class="est-b">추정</span></span><b>' + won(p.tuition) + '</b></div>';
+    h += '<div class="krow"><span>회사 지원</span><b style="color:var(--ok)">−' + won(p.company) + '</b></div>';
+    h += '<div class="krow"><span>부대비용</span><b>+' + won(extra) + '</b></div>';
+    h += '<div class="krow" style="border-top:1px solid var(--line);margin-top:4px;padding-top:8px">'
+      + '<span>월 평균 (' + Math.round(mon) + '개월)</span><b>' + won(p.monthly) + '</b></div>';
+    h += '<div class="risk-amt"><span>중도 퇴사 시 반환 위험액 · 의무재직 ' + bond + '년</span>'
+      + '<b>' + man(p.bondRisk) + '원</b></div>';
+    h += '</div>';
+    return h;
+  }).join('');
+
+  document.getElementById('costBars').innerHTML = '<div class="bars">' + progs.map(function(p){
+    var w = Math.round(p.mine / max * 100);
+    var col = p.mine === min ? 'var(--ok)' : (p.tag === 'snu' ? 'var(--snu)' : 'var(--kaist)');
+    return '<div class="brow"><div style="font-size:12.5px">' + p.n + '</div>'
+      + '<div class="bt"><i style="width:' + Math.max(w, 3) + '%;background:' + col + '"></i></div>'
+      + '<div class="bv">' + man(p.mine) + '</div></div>';
+  }).join('') + '</div>';
+
+  document.querySelectorAll('#presets .chip').forEach(function(b){
+    b.setAttribute('aria-pressed', String(+b.dataset.sup === Math.round(sup * 100)));
+  });
+}
+
+/* ══ ⑩ 비교 막대 ════════════════════════════════════════ */
+
+function drawCmpBars(){
+  function bars(arr, col){
+    return '<div class="bars">' + arr.map(function(o){
+      return '<div class="brow"><div style="font-size:12.5px">' + o.n + '</div>'
+        + '<div class="bt"><i style="width:' + o.v + '%;background:' + col + '"></i></div>'
+        + '<div class="bv">' + o.v + '%</div></div>';
+    }).join('') + '</div>';
+  }
+  document.getElementById('b_exp').outerHTML = '<div id="b_exp">' + bars(CMP_EXP, 'var(--kaist)') + '</div>';
+  document.getElementById('b_ind').outerHTML = '<div id="b_ind">' + bars(CMP_IND, 'var(--snu)') + '</div>';
+}
+
+/* ══ ⑪ CRUD ═════════════════════════════════════════════ */
+
+function addEv(){
+  var d = document.getElementById('ev_d').value, t = document.getElementById('ev_t').value.trim();
+  if(!t){ toast('일정 내용을 입력한다'); return; }
+  if(!d){ toast('날짜를 선택한다'); return; }
+  DB.ev.push({ d:d, t:t });
+  document.getElementById('ev_t').value = '';
+  save(); renderAll(); toast('일정 추가 — ' + md(d));
+}
+function delEv(i){ DB.ev.splice(i, 1); save(); renderAll(); toast('일정 삭제'); }
+
+function addTask(){
+  var d = document.getElementById('mt_d').value, t = document.getElementById('mt_t').value.trim();
+  if(!t){ toast('할 일 내용을 입력한다'); return; }
+  DB.task.push({ d:d || '', t:t, done:false });
+  document.getElementById('mt_t').value = '';
+  save(); renderAll();
+  toast(d ? ('할 일 추가 — ' + ddText(diff(d))) : '할 일 추가 (기한 없음)');
+}
+function delTask(i){ DB.task.splice(i, 1); save(); renderAll(); toast('할 일 삭제'); }
+function toggleTask(i, v){
+  DB.task[i].done = v; save();
+  drawTasks(); drawFocus(); renderProg();
+  if(v) toast('완료 — 남은 ' + DB.task.filter(function(o){ return !o.done; }).length + '개');
+}
+
+/* ══ ⑫ 렌더 총괄 ════════════════════════════════════════ */
 
 function renderAll(){
-  render('top5','top5','top5bar','top5pct');
-  fit('top5');
-  document.getElementById('top5pct').textContent =
-    ST.top5.filter(Boolean).length+' / 5 완료';
-  render('snu','ck-snu','bar-snu','pct-snu');
-  render('kaist','ck-kaist','bar-kaist','pct-kaist');
-  render('common','ck-common','bar-common','pct-common');
-  render('essay','ck-essay','bar-essay','pct-essay');
-  render('itv','ck-itv','bar-itv','pct-itv');
-  renderProg();
-  drawTasks();
-  drawFocus();
+  render('top5', 'top5', 'top5bar', 'top5pct');
+  render('snu', 'ck-snu', 'bar-snu', 'pct-snu');
+  render('kaist', 'ck-kaist', 'bar-kaist', 'pct-kaist');
+  render('common', 'ck-common', 'bar-common', 'pct-common');
+  render('essay', 'ck-essay', 'bar-essay', 'pct-essay');
+  render('itv', 'ck-itv', 'bar-itv', 'pct-itv');
+  drawHero(); drawFocus(); drawDday(); drawTL(); drawSW(); drawTasks(); renderProg(); drawRec();
 }
-function renderProg(){
-  var keys=[['snu','서울대 EMBA'],['kaist','KAIST'],['common','공통 서류'],['essay','자기소개서'],['itv','면접 준비']];
-  var h='';
-  keys.forEach(function(p){
-    var a=ST[p[0]]||[], d=a.filter(Boolean).length, n=LISTS[p[0]].length, pc=Math.round(d/n*100);
-    h+='<div class="bargrp"><div class="lbl"><span>'+p[1]+'</span><b>'+d+'/'+n+'</b></div>'+
-       '<div class="tr"><i style="width:'+pc+'%;background:linear-gradient(90deg,var(--acc),#a78bfa)"></i></div></div>';
-  });
-  document.getElementById('prog').innerHTML=h;
 
-  /* 헤더 전체 진척도 (전 리스트 + 내 할 일) */
-  var td=0, tn=0;
-  Object.keys(LISTS).forEach(function(k){ fit(k); td+=ST[k].filter(Boolean).length; tn+=LISTS[k].length; });
-  myTasks().forEach(function(o){ tn++; if(o.done) td++; });
-  var apc = tn? Math.round(td/tn*100) : 0;
-  var ab=document.getElementById('allbar'), ap=document.getElementById('allpct');
-  if(ab) ab.style.width=apc+'%';
-  if(ap) ap.textContent=apc+'% · '+td+'/'+tn;
-}
-document.addEventListener('change',function(e){
-  var t=e.target;
-  if(t.type!=='checkbox') return;
-  if(t.dataset.k){
-    fit(t.dataset.k);
-    ST[t.dataset.k][+t.dataset.i]=t.checked;
-    renderAll(); save();
-  } else if(t.dataset.task!==undefined){
-    var o=myTasks()[+t.dataset.task];
-    if(o){ o.done=t.checked; drawTasks(); drawFocus(); renderProg(); save(); }
-  } else if(t.id==='onlyopen'){
-    ONLY=t.checked;
-    var w=document.getElementById('swwrap'); if(w) w.classList.toggle('on',ONLY);
-    renderAll();
+/* ══ ⑬ 이벤트 위임 ══════════════════════════════════════ */
+
+document.addEventListener('change', function(e){
+  var el = e.target;
+  if(el.type === 'checkbox'){
+    if(el.id === 'onlyopen'){
+      ONLY = el.checked;
+      try{ localStorage.setItem('emba2027_only', ONLY ? '1' : '0'); }catch(x){}
+      renderAll();
+      return;
+    }
+    if(el.dataset.task !== undefined){ toggleTask(+el.dataset.task, el.checked); return; }
+    if(el.dataset.k !== undefined && el.dataset.i !== undefined){
+      var k = el.dataset.k, i = +el.dataset.i;
+      DB.chk[k][i] = el.checked;
+      var row = el.closest('.it');
+      if(row && el.checked) row.classList.add('just');
+      save();
+      var left = 0;
+      KEYS.forEach(function(kk){ left += DB.chk[kk].filter(function(b){ return !b; }).length; });
+      setTimeout(function(){
+        renderAll();
+        if(el.checked) toast('완료 — 전체 남은 ' + left + '개');
+      }, el.checked ? 300 : 0);
+      return;
+    }
+  }
+  if(el.dataset && el.dataset.rec !== undefined){
+    DB.rec[+el.dataset.rec][el.dataset.fd] = el.value; save(); drawRec();
   }
 });
-drawDday();
-drawTL();
-renderAll();
 
-/* ---------- 추천인 ---------- */
-var RECS = (DB.rec && DB.rec.length) ? DB.rec : [
-  {r:'서울대 회사추천서',n:'',d:'',s:'미요청'},
-  {r:'서울대 추천서',n:'',d:'',s:'미요청'},
-  {r:'KAIST 추천서',n:'',d:'',s:'미요청'}
-];
-DB.rec = RECS;
-function drawRec(){
-  var h='';
-  RECS.forEach(function(o,i){
-    h+='<tr><td style="font-size:12px">'+o.r+'</td>'+
-       '<td><input type="text" value="'+o.n+'" placeholder="성함/직책" oninput="RECS['+i+'].n=this.value;save()"></td>'+
-       '<td><input type="text" value="'+o.d+'" placeholder="MM/DD" oninput="RECS['+i+'].d=this.value;save()"></td>'+
-       '<td><select onchange="RECS['+i+'].s=this.value;save()">'+
-       ['미요청','요청함','수령완료'].map(function(s){return '<option'+(o.s===s?' selected':'')+'>'+s+'</option>';}).join('')+
-       '</select></td></tr>';
-  });
-  document.getElementById('recTb').innerHTML=h;
+document.addEventListener('input', function(e){
+  var el = e.target;
+  if(!el.id) {
+    if(el.dataset && el.dataset.rec !== undefined){
+      DB.rec[+el.dataset.rec][el.dataset.fd] = el.value; save();
+    }
+    return;
+  }
+  if(/^(e_|c_|q\d)/.test(el.id)){
+    DB.f[el.id] = el.value;
+    save();
+    if(el.id.indexOf('e_') === 0) cc(el.id);
+    if(/^q\d/.test(el.id)) qcc(+el.id.slice(1));
+    if(el.id.indexOf('c_') === 0) calc();
+  }
+});
+
+document.addEventListener('click', function(e){
+  var b = e.target.closest ? e.target.closest('[data-delev],[data-deltask],[data-delrec]') : null;
+  if(b){
+    e.preventDefault();
+    if(b.dataset.delev !== undefined) delEv(+b.dataset.delev);
+    else if(b.dataset.deltask !== undefined) delTask(+b.dataset.deltask);
+    else if(b.dataset.delrec !== undefined){ DB.rec.splice(+b.dataset.delrec, 1); save(); drawRec(); }
+    return;
+  }
+  var t = e.target.closest ? e.target.closest('nav button[data-t]') : null;
+  if(t){ goTab(t.dataset.t); }
+});
+
+function goTab(id){
+  var secs = document.querySelectorAll('section');
+  for(var i = 0; i < secs.length; i++) secs[i].classList.toggle('on', secs[i].id === id);
+  var bs = document.querySelectorAll('nav button[data-t]');
+  for(var j = 0; j < bs.length; j++) bs[j].setAttribute('aria-selected', String(bs[j].dataset.t === id));
+  window.scrollTo(0, 0);
+  try{ localStorage.setItem('emba2027_tab', id); }catch(x){}
 }
-function addRec(){RECS.push({r:'추가',n:'',d:'',s:'미요청'});drawRec();save();}
-drawRec();
 
-/* ---------- 비용 ---------- */
-function won(n){return n.toLocaleString('ko-KR')+'원';}
-function v(id){return +document.getElementById(id).value||0;}
-function calc(){
-  var sup=Math.min(100,Math.max(0,v('c_sup')))/100;
-  var ent=v('c_ent'), fee=v('c_fee'), trip=v('c_trip'), book=v('c_book');
-  var life=v('c_life')*v('c_mon');
-  var bond=v('c_bond');
-  var sch=[
-    {n:'서울대 EMBA',id:'c_snu',c:'var(--snu)'},
-    {n:'KAIST Executive MBA',id:'c_kai',c:'var(--kaist)'},
-    {n:'KAIST Professional MBA',id:'c_pmba',c:'#a78bfa'}
-  ];
-  var out='', maxSelf=0, rows=[];
-  sch.forEach(function(s){
-    var tu=v(s.id), comp=Math.round(tu*sup), self=tu-comp;
-    var total=tu+ent+fee+trip+book+life;
-    var mine=self+ent+fee+trip+book+life;
-    maxSelf=Math.max(maxSelf,mine);
-    rows.push({n:s.n,c:s.c,mine:mine});
-    out+='<div class="card"><h2><span style="color:'+s.c+'">■</span> '+s.n+'</h2>'+
-      '<div class="pct">본인 실부담 총액</div>'+
-      '<div class="big" style="color:'+s.c+'">'+won(mine)+'</div>'+
-      '<div style="margin:12px 0 8px"><div class="mini"><span>총 등록금</span><b>'+won(tu)+'</b></div>'+
-      '<div class="mini"><span>회사 지원 ('+Math.round(sup*100)+'%)</span><b style="color:var(--ok)">−'+won(comp)+'</b></div>'+
-      '<div class="mini"><span>등록금 본인부담</span><b>'+won(self)+'</b></div>'+
-      '<div class="mini"><span>입학금</span><b>'+won(ent)+'</b></div>'+
-      '<div class="mini"><span>전형료</span><b>'+won(fee)+'</b></div>'+
-      '<div class="mini"><span>해외현장연구</span><b>'+won(trip)+'</b></div>'+
-      '<div class="mini"><span>교재·기타</span><b>'+won(book)+'</b></div>'+
-      '<div class="mini"><span>교통·식비 ('+v('c_mon')+'개월)</span><b>'+won(life)+'</b></div></div>'+
-      '<dl class="kv"><dt>전체 소요액 (회사분 포함)</dt><dd>'+won(total)+'</dd>'+
-      '<dt>월 평균 본인 부담</dt><dd>'+won(Math.round(mine/(v('c_mon')||1)))+'</dd>'+
-      '<dt>중도 퇴사 시 반환 위험액</dt><dd style="color:var(--warn)">'+won(comp)+'</dd>'+
-      '<dt>의무 재직</dt><dd>'+bond+'년</dd></dl></div>';
+/* 엔터로 등록 */
+['ev_t','mt_t'].forEach(function(id){
+  document.addEventListener('keydown', function(e){
+    if(e.target.id === id && e.key === 'Enter'){
+      e.preventDefault();
+      id === 'ev_t' ? addEv() : addTask();
+    }
   });
-  document.getElementById('costOut').innerHTML=out;
-  var b='';
-  rows.forEach(function(r){
-    var pc = maxSelf? Math.round(r.mine/maxSelf*100):0;
-    b+='<div class="bargrp"><div class="lbl"><span>'+r.n+'</span><b>'+won(r.mine)+'</b></div>'+
-       '<div class="tr"><i style="width:'+pc+'%;background:'+r.c+'"></i></div></div>';
-  });
-  document.getElementById('costBars').innerHTML=b;
-}
-calc();
+});
 
-/* ---------- 면접 Q&A ---------- */
-var QS=[
-  {c:'기본',q:'1분 자기소개를 해주세요.',h:'현재 역할 → 대표 성과 1개(숫자) → 지원 이유 한 문장. 이력 나열 금지.'},
-  {c:'기본',q:'왜 지금 MBA를 하려고 하십니까?',h:'현업에서 부딪힌 구체적 한계 → 그 한계가 왜 독학으로 해결 안 되는지 → 이 과정이 그 격차를 어떻게 메우는지.'},
-  {c:'기본',q:'여러 학교 중 왜 우리 학교입니까?',h:'커리큘럼·교수·과정 특성 중 구체적 요소를 1~2개 지목. 서울대는 경영프로젝트 연구보고서, KAIST는 기술경영 융합·해외현장연구·현장적용프로젝트.'},
-  {c:'압박',q:'다른 지원자에 비해 경력이 짧은데 수업을 따라올 수 있겠습니까?',h:'★ 박사학위를 방패가 아닌 무기로. ① 박사과정에서 검증한 분석·문헌해독·장기 프로젝트 완주 역량 ② 8년간의 책임 범위(관리 인원·예산 규모·의사결정 권한·대외 협상) ③ 오히려 연차 높은 동기들에게 제공할 수 있는 것. 방어가 아니라 근거 제시.'},
-  {c:'압박',q:'박사학위가 있는데 왜 다시 MBA를 하려 합니까? 학위 수집 아닙니까?',h:'★ 신설 질문. 박사=깊이(전문 영역), MBA=폭(경영 전반·네트워크)이라는 상보 구조로 답하세요. "무엇을 못해서 왔는가"를 구체적 업무 실패/한계 사례 1개로 제시하면 설득력이 급상승합니다.'},
-  {c:'압박',q:'2년간 회사 업무와 학업을 병행할 수 있겠습니까?',h:'추상적 각오가 아니라 구체적 방법 — 업무 위임 계획, 상사 사전 협의 여부, 가족 합의 완료 사실.'},
-  {c:'압박',q:'졸업 후 이직할 생각이 있습니까?',h:'회사 지원을 받는 구조에서는 신중히. 현 조직에서의 성장 경로를 중심으로 답하되 거짓말은 금물.'},
-  {c:'압박',q:'우리 과정이 아니라 온라인 강의로도 배울 수 있지 않습니까?',h:'코호트 학습, 동료와의 상호 검증, 프로젝트 기반 실전 적용 — 혼자서는 재현 불가능한 요소를 지목.'},
-  {c:'경력',q:'본인의 가장 큰 성과와 그 과정에서의 역할은?',h:'상황–과제–행동–결과(STAR). 결과는 반드시 수치로. "우리 팀이"가 아니라 "제가 무엇을 결정했는지".'},
-  {c:'경력',q:'가장 크게 실패한 경험과 배운 점은?',h:'실제 실패를 고르되 본인 책임을 인정하고, 이후 행동이 실제로 바뀐 사례까지 연결.'},
-  {c:'경력',q:'리더로서 팀을 이끌며 가장 어려웠던 순간은?',h:'갈등 상황과 본인의 판단 기준. 사람을 비난하지 않고 구조적으로 서술.'},
-  {c:'경력',q:'본인의 강점과 약점은?',h:'약점은 실제 약점을 말하되 개선 조치를 함께. "완벽주의" 같은 위장 답변은 감점.'},
-  {c:'전략',q:'소속 산업의 향후 3년 최대 변화는 무엇이라 보십니까?',h:'AI·규제·공급망·인구구조 중 본인 산업에 실제로 작동하는 축 하나. 뉴스 요약이 아니라 본인 관점.'},
-  {c:'전략',q:'본인 회사가 지금 당장 해결해야 할 과제 하나를 꼽는다면?',h:'회사 비판이 아니라 본인이 기여할 수 있는 영역으로 설계. MBA 학습과 연결.'},
-  {c:'전략',q:'AI가 본인 직무에 미치는 영향과 대응은?',h:'추상적 낙관 금지. 본인 업무 중 자동화되는 부분과 남는 부분을 구분해서 설명.'},
-  {c:'계획',q:'졸업 후 3년, 10년 계획은?',h:'3년은 구체적 직무·책임 범위, 10년은 방향성. 커리큘럼 과목과 인과관계가 보여야 함.'},
-  {c:'계획',q:'이 과정에서 동기들에게 무엇을 기여할 수 있습니까?',h:'본인 업종의 희소성을 활용. KAIST EMBA는 제조 41%·IT 40%가 주류이므로 그 외 업종이면 강점.'},
-  {c:'계획',q:'마지막으로 하고 싶은 말이 있습니까?',h:'준비된 클로징 30초. 지원 이유를 한 문장으로 다시 못 박고 끝냅니다.'}
-];
-(function(){
-  var h='', cur='';
-  QS.forEach(function(o,i){
-    if(o.c!==cur){cur=o.c;h+='<h3 style="margin:16px 0 8px">'+cur+'</h3>';}
-    h+='<details><summary>'+o.q+'</summary><div class="bd">'+
-       '<div class="hint">💡 '+o.h+'</div>'+
-       '<textarea id="q'+i+'" placeholder="답변 스크립트를 작성하세요 (60~90초 분량)"></textarea></div></details>';
+/* ══ ⑭ 부팅 ═════════════════════════════════════════════ */
+
+(function init(){
+  load();
+
+  var d = new Date();
+  var wk = ['일','월','화','수','목','금','토'][d.getDay()];
+  var toDeadline = diff('2026-10-08');
+  document.getElementById('today').textContent =
+    (d.getMonth() + 1) + '/' + d.getDate() + '(' + wk + ')'
+    + (toDeadline >= 0 ? ' · 마감까지 ' + toDeadline + '일' : '');
+
+  drawEssay(); drawItv(); drawCmpBars();
+
+  CIDS.forEach(function(id){
+    var el = document.getElementById(id);
+    if(el && DB.f[id] !== undefined && DB.f[id] !== '') el.value = DB.f[id];
   });
-  document.getElementById('qbank').innerHTML=h;
+
+  try{ ONLY = localStorage.getItem('emba2027_only') === '1'; }catch(x){}
+  document.getElementById('onlyopen').checked = ONLY;
+
+  renderAll();
+  calc();
+
+  document.getElementById('ev_add').addEventListener('click', addEv);
+  document.getElementById('mt_add').addEventListener('click', addTask);
+
+  document.getElementById('qa_task').addEventListener('click', function(){ qaMode('task'); });
+  document.getElementById('qa_ev').addEventListener('click', function(){ qaMode('ev'); });
+  function qaMode(m){
+    var isT = m === 'task';
+    document.getElementById('qa_task').setAttribute('aria-pressed', String(isT));
+    document.getElementById('qa_ev').setAttribute('aria-pressed', String(!isT));
+    document.getElementById('qa_task_f').hidden = !isT;
+    document.getElementById('qa_ev_f').hidden = isT;
+    document.getElementById(isT ? 'mt_t' : 'ev_t').focus();
+  }
+
+  document.getElementById('e_exp').addEventListener('click', exportEssay);
+  document.getElementById('i_exp').addEventListener('click', exportItv);
+
+  document.getElementById('zen_t').addEventListener('click', function(){
+    var on = !document.body.classList.contains('zen');
+    document.body.classList.toggle('zen', on);
+    this.textContent = on ? '집중 모드 해제' : '집중 모드';
+    if(on) toast('집중 모드 — 입력 영역만 남는다');
+  });
+
+  document.getElementById('m_list').addEventListener('click', function(){ setPrac(false); });
+  document.getElementById('m_prac').addEventListener('click', function(){ setPrac(true); });
+  document.getElementById('t_go').addEventListener('click', startT);
+  document.getElementById('t_rs').addEventListener('click', resetT);
+  document.getElementById('p_prev').addEventListener('click', function(){ goQ(CUR - 1); });
+  document.getElementById('p_next').addEventListener('click', function(){ goQ(CUR + 1); });
+
+  document.querySelectorAll('#presets .chip').forEach(function(b){
+    b.addEventListener('click', function(){
+      var v = b.dataset.sup;
+      document.getElementById('c_sup').value = v;
+      DB.f['c_sup'] = v; save(); calc();
+    });
+  });
+
+  document.getElementById('rec_add').addEventListener('click', function(){
+    DB.rec.push({ r:'', n:'', d:'', s:'미요청' }); save(); drawRec();
+  });
+
+  document.getElementById('bk_out').addEventListener('click', function(){
+    var blob = new Blob([JSON.stringify(DB, null, 2)], { type:'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'emba2027-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click(); URL.revokeObjectURL(a.href);
+    toast('백업 파일을 저장했다');
+  });
+  document.getElementById('bk_in').addEventListener('click', function(){
+    document.getElementById('bk_tx').hidden = false;
+    document.getElementById('bk_do').hidden = false;
+    document.getElementById('bk_tx').focus();
+  });
+  document.getElementById('bk_do').addEventListener('click', function(){
+    try{
+      var o = JSON.parse(document.getElementById('bk_tx').value);
+      if(!o || typeof o !== 'object') throw 0;
+      DB.chk = o.chk || {}; DB.ev = o.ev || []; DB.task = o.task || [];
+      DB.rec = o.rec || []; DB.f = o.f || {};
+      KEYS.forEach(fit); save(); location.reload();
+    }catch(x){ toast('복원 실패 — JSON 형식을 확인한다'); }
+  });
+  document.getElementById('bk_rst').addEventListener('click', function(){
+    if(!confirm('모든 체크·일정·할 일·작성 내용이 삭제된다. 되돌릴 수 없다. 계속하겠는가?')) return;
+    try{ localStorage.removeItem(LSKEY); }catch(x){}
+    location.reload();
+  });
+
+  try{
+    var tab = localStorage.getItem('emba2027_tab');
+    if(tab && document.getElementById(tab)) goTab(tab);
+  }catch(x){}
 })();
-
-/* ---------- 저장값 복원 ---------- */
-restore();
-calc();
-
-/* ---------- 내보내기 ---------- */
-function g(id){return (document.getElementById(id).value||'').trim();}
-function exportEssay(){
-  var t='=== EMBA 자기소개서 스토리라인 ===\n\n'+
-    '[포지셔닝 한 문장]\n'+g('e_pos')+'\n\n'+
-    '[지원 동기 Why MBA / Why Now]\n'+g('e_why')+'\n\n'+
-    '[경력 하이라이트]\n'+g('e_car')+'\n\n'+
-    '[박사 x 실무 8년 차별화 논리]\n'+g('e_gap')+'\n\n'+
-    '[졸업 후 경력계획]\n'+g('e_plan')+'\n\n'+
-    '[학교 선택 이유]\n'+g('e_fit')+'\n';
-  var o=document.getElementById('eout'); o.style.display='block';
-  document.getElementById('eouttx').value=t;
-  document.getElementById('eouttx').select();
-}
-function exportItv(){
-  var t='=== EMBA 면접 답변 스크립트 ===\n\n', cur='';
-  QS.forEach(function(o,i){
-    var a=g('q'+i); if(!a) return;
-    if(o.c!==cur){cur=o.c;t+='\n--- '+cur+' ---\n';}
-    t+='\nQ. '+o.q+'\nA. '+a+'\n';
-  });
-  var o=document.getElementById('iout'); o.style.display='block';
-  document.getElementById('iouttx').value = t==='=== EMBA 면접 답변 스크립트 ===\n\n' ? '아직 작성된 답변이 없습니다.' : t;
-  document.getElementById('iouttx').select();
-}
 </script>
 </body>
 </html>
