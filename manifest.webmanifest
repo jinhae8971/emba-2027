@@ -1,0 +1,20 @@
+{
+  "name": "EMBA 2027 봄학기 입학 준비 대시보드",
+  "short_name": "EMBA 2027",
+  "description": "서울대 EMBA · KAIST Executive MBA 2027 봄학기 지원 준비 관리",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
